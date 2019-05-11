@@ -226,3 +226,6 @@ $RECYCLE.BIN/
 # Don't track build folders
 */build/
 *.gradle/
+
+# Visual Studio code setting folder
+*.vscode
