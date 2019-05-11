@@ -2,6 +2,7 @@ package main.java.order;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,45 +24,42 @@ public class OrderController {
     // Pathvariable => straight up
     @RequestMapping("/create/{userId}")
     public Order orderCreate(@PathVariable String userId) {
-        return new Order(counter.incrementAndGet(),
-                            String.format(template, userId));
+        Order o = new Order(userId, counter.incrementAndGet());
+        jedis.set(o.getorderId(), o.getUserId());
+        return o;
     }
 
 
     // @RequestMapping("/remove/{orderid}")
     // RequestParam => orders/remove?orderId={id}
     @RequestMapping("/remove")
-    public Order orderRemove(@RequestParam(value="orderId", defaultValue="World") String orderId) {
-        jedis.set("runar", "wat");
-        String ca = jedis.get("runar");
-        System.out.println(ca);
-        return new Order(counter.incrementAndGet(),
-                            String.format(template, orderId));
+    public boolean orderRemove(@RequestParam(value="orderId", defaultValue="test") String orderId) {
+        long deleted = jedis.del(orderId);
+        if (deleted>0){
+            return true;
+        }
+        return false;
     }
 
 
     @RequestMapping("/find/{orderid}")
     public Order orderFind(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Order(counter.incrementAndGet(),
-                            String.format(template, name));
+        return new Order("def", counter.incrementAndGet());
     }
 
     @RequestMapping("/addItem/{orderid}/{itemid}")
     public Order orderAddItem(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Order(counter.incrementAndGet(),
-                            String.format(template, name));
+        return new Order("def", counter.incrementAndGet());
     }
 
     @RequestMapping("/removeItem/{orderid}/{itemid}")
     public Order orderRemoveItem(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Order(counter.incrementAndGet(),
-                            String.format(template, name));
+        return new Order("def", counter.incrementAndGet());
     }
 
     @RequestMapping("/checkout/{orderid}")
     public Order orderCheckout(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Order(counter.incrementAndGet(),
-                            String.format(template, name));
+        return new Order("def", counter.incrementAndGet());
     }
 
 }

@@ -28,6 +28,7 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    // compile 'org.springframework.boot:spring-boot-starter-data-redis'
+    compile('org.springframework.boot:spring-boot-starter-data-redis')
     compile('redis.clients:jedis:2.9.0')
+    compile('com.googlecode.json-simple:json-simple:1.1.1')
 }
