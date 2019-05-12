@@ -15,8 +15,11 @@ public class Order implements Serializable{
     // ??
     private static final long serialVersionUID = 1L;
 
-	private final long orderId;
-    private final String userId;
+    // Identifier for this order
+    private final long orderId;
+    // User that owns this order
+    private final long userId;
+    // list of item ids
     private List<Long> items;
 
     // need this?
@@ -32,11 +35,11 @@ public class Order implements Serializable{
         this.isPayed = false;
     }
 
-    public String getorderId() {
-        return orderId+"";
+    public long getorderId() {
+        return orderId;
     }
 
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
     public List<Long> getItems() {
@@ -44,6 +47,10 @@ public class Order implements Serializable{
     }
     public boolean getPaymentStatus(){
         return isPayed;
+    }
+    // TODO: implement
+    public boolean addItem() {
+        return true;
     }
 
 }
