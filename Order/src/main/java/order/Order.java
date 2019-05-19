@@ -27,7 +27,7 @@ public class Order implements Serializable{
 
 
     public Order(String userId, long orderId) {
-        this.userId = userId;
+        this.userId = Long.parseLong(userId);
         this.orderId = orderId;
 
 
