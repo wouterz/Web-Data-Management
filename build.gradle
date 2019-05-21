@@ -28,5 +28,10 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('redis.clients:jedis:2.9.0')
+    compile('org.springframework.boot:spring-boot-starter-data-redis')
+    compile('com.googlecode.json-simple:json-simple:1.1.1')
+    // https://mvnrepository.com/artifact/com.github.kstyrc/embedded-redis
+	compile('com.github.kstyrc:embedded-redis:0.6')
 }
 
