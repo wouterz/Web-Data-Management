@@ -1,0 +1,8 @@
+bootJar {
+    baseName = 'eureka-server'
+    version =  '0.1.0'
+}
+
+dependencies {
+//    compile('org.springframework.cloud:spring-cloud-dependencies')
+}
