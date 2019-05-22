@@ -1,4 +1,4 @@
-package service.user;
+package service.user.models;
 
 public class User {
 
@@ -8,6 +8,14 @@ public class User {
 
     public long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", credits=" + credits +
+                '}';
     }
 
     public User(long id, long credits) {

@@ -13,11 +13,9 @@ spring:
     stream:
       bindings:
         output:
-          destination: users-in
-        input:
-          consumer:
-            partitioned: true
           destination: users-out
+        input:
+          destination: users-in
           group: users
       rabbit:
         bindings:

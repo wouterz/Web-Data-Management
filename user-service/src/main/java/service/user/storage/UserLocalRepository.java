@@ -1,11 +1,10 @@
 package service.user.storage;
 
 import org.springframework.stereotype.Repository;
-import service.user.User;
+import service.user.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class UserLocalRepository implements Dao {
@@ -27,10 +26,9 @@ public class UserLocalRepository implements Dao {
 
     @Override
     public User get(long id) {
-//        Optional<User> user = Users.stream().filter(p ->  p.getId().equals(id)).findFirst();
-
-//        return user.orElse(null);
-        return null;
+        List<Long> ids = new ArrayList<>(1);
+        ids.add(id);
+        return Users.stream().filter(p -> ids.contains(p.getId())).findFirst().orElse(null);
     }
 
     @Override
@@ -39,9 +37,5 @@ public class UserLocalRepository implements Dao {
         return user.getId() != 0;
     }
 
-    public List<User> find(Long id) {
-        List<Long> ids = new ArrayList<>(1);
-        ids.add(id);
-        return Users.stream().filter(p -> ids.contains(p.getId())).collect(Collectors.toList());
-    }
+
 }

@@ -6,18 +6,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
-import org.springframework.integration.channel.DirectChannel;
+import service.user.messaging.UserService;
+import service.user.models.User;
 
 @SpringBootApplication
-@EnableEurekaClient
+//@EnableDiscoveryClient
 @EnableBinding(Processor.class)
+@EnableFeignClients
 public class UserApplication {
 
     @Value("${spring.application.name}")
@@ -25,9 +27,6 @@ public class UserApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserApplication.class);
     private ObjectMapper mapper = new ObjectMapper();
-
-
-    private DirectChannel incomingChannel;
 
     @Autowired
     private UserService service;
@@ -38,9 +37,9 @@ public class UserApplication {
     }
 
     @StreamListener(Processor.INPUT)
-    public void receiveOrder(User order) throws JsonProcessingException {
-        LOGGER.info("Order received: {}", mapper.writeValueAsString(order));
-        service.process(order);
+    public void receiveOrder(User user) throws JsonProcessingException {
+        LOGGER.info("Message received: {}", mapper.writeValueAsString(user));
+        service.process(user);
     }
 
 

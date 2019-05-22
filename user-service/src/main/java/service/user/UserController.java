@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import service.user.messaging.StockClient;
+import service.user.messaging.UserSender;
+import service.user.models.User;
 import service.user.storage.UserLocalRepository;
 
 @RestController
@@ -22,6 +25,9 @@ public class UserController {
 
 
     @Autowired
+    private StockClient stockClient;
+
+    @Autowired
     UserSender sender;
 
     @Autowired
@@ -29,27 +35,40 @@ public class UserController {
 
 
 
-    @PostMapping("service/user/create/")
+    @PostMapping("/user/create")
     public long create() {
-        return userLocalRepository.create(counter.incrementAndGet());
+        LOGGER.info("Request: /user/create");
+        User user = new User(counter.getAndIncrement(), 0);
+        boolean send = sender.send(user);
+        LOGGER.info("Request: Message : " + user.toString() +" was sent: " + send);
+
+
+        return userLocalRepository.create(counter.get());
     }
 
-    @DeleteMapping("/service/user/remove/{user_id}")
+    @DeleteMapping("/user/{user_id}")
     public boolean remove(@PathVariable(value = "user_id") long user_id) {
+        LOGGER.info("Request: /user/remove/" + user_id);
+        stockClient.createStockItem("pindas");
+
         return userLocalRepository.delete(user_id);
     }
 
-    @GetMapping("/service/user/{user_id}")
+    @GetMapping("/user/{user_id}")
     public String find(@PathVariable(value = "user_id") long user_id) {
-        return userLocalRepository.find(user_id).toString();
+        LOGGER.info("Request: user/" + user_id);
+
+        return userLocalRepository.get(user_id).toString();
     }
 
-    @GetMapping("/service/user/{user_id}/credit/")
+    @GetMapping("/user/{user_id}/credit")
     public long getCredits(@PathVariable(value = "user_id") long user_id) {
+        LOGGER.info("Request: user/" + user_id +"/credit");
+
         return userLocalRepository.get(user_id).getCredits();
     }
 
-    @PostMapping("/service/user/{user_id}/credit/add/{amount}")
+    @PostMapping("/user/{user_id}/credit/add/{amount}")
     public Boolean addCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount) throws JsonProcessingException {
         User user = userLocalRepository.get(user_id);
         user.setCredits(user.getCredits() + amount);
@@ -61,7 +80,7 @@ public class UserController {
         return true;
     }
 
-    @PostMapping("/service/user/{user_id}/credit/subtract/{amount}")
+    @PostMapping("/user/{user_id}/credit/subtract/{amount}")
     public Boolean subtractCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount) {
         User user = userLocalRepository.get(user_id);
 

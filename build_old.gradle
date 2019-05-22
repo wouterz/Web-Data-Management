@@ -1,0 +1,62 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+
+bootJar {
+    baseName = 'web-database-management'
+    version = '0.1.0'
+
+}
+
+
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE"
+
+        }
+    }
+
+    dependencies {
+        compile("org.springframework.boot:spring-boot-starter-web")
+        compile("org.springframework.boot:spring-boot-starter-data-redis")
+        compile("org.springframework.boot:spring-boot-starter-integration")
+
+        compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+        compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
+
+        compile('org.springframework.cloud:spring-cloud-starter-netflix-zuul')
+        compile('org.springframework.cloud:spring-cloud-starter-openfeign')
+
+        compile("org.springframework.cloud:spring-cloud-stream-binder-rabbit")
+
+        testCompile("org.springframework.cloud:spring-cloud-stream-test-support")
+    }
+}

@@ -1,1 +1,9 @@
-include 'user-service', 'order-service', 'stock-service', 'eureka-server'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+//rootProject.name = 'web-data-basemangement'
+
+
+include 'user-service', 'order-service', 'stock-service', 'eureka-server', 'zuul-server'

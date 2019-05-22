@@ -13,6 +13,7 @@ import org.springframework.cloud.stream.test.binder.MessageCollector;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.junit4.SpringRunner;
+import service.user.models.User;
 
 
 @RunWith(SpringRunner.class)

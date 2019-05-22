@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: ${PORT:8081}
 
 spring:
   application:
@@ -23,10 +23,16 @@ spring:
         bindings:
           output:
             producer:
-              exchangeType: direct
-              routingKeyExpression: '"#"'
+              exchangeType: fanout
+#              routingKeyExpression: '"#"'
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+
+ribbon:
+  eureka:
+    enabled: true

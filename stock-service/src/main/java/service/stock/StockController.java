@@ -1,5 +1,7 @@
 package service.stock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,32 +14,36 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 public class StockController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(StockController.class);
+
+
     // Temporary way to generate ID
     private final AtomicLong counter = new AtomicLong();
 
     // Create a new stock item by supplying the name
-    @RequestMapping(value= "/service/stock/item/create", method=POST)
+    @RequestMapping(value= "/stock/item/create", method=POST)
     public StockItem createStockItem(@RequestParam(value="name") String name) {
+        LOGGER.info("REQUEST: /stock/item/create");
         // Stock item should be added to database
         return new StockItem(counter.getAndIncrement(), name);
     }
 
     // Get info for a stock by supplying the id
-    @RequestMapping(value= "/service/stock/availability", method=GET)
+    @RequestMapping(value= "/stock/availability", method=GET)
     public StockItem getStockItem(@RequestParam(value="id") long id) {
         // Should get Stock item from database
         return new StockItem(id, "fromDatabase");
     }
 
     // Add to the stock of an item by supplying the id
-    @RequestMapping(value= "/service/stock/add", method=POST)
+    @RequestMapping(value= "/stock/add", method=POST)
     public StockItem addStock(@RequestParam(value="id") long id,
                               @RequestParam(value="amount") int amount) {
         return updateStock(id, amount);
     }
 
     // Subtract from the stock of an item by supplying the id
-    @RequestMapping(value= "/service/stock/subtract", method=POST)
+    @RequestMapping(value= "/stock/subtract", method=POST)
     public StockItem subtractStock(@RequestParam(value="id") long id,
                               @RequestParam(value="amount") int amount) {
         return updateStock(id, -amount);
