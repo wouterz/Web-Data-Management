@@ -1,4 +1,4 @@
-package service.stock;
+package service.payment.models;
 
 public class StockItem {
 

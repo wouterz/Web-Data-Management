@@ -8,7 +8,7 @@ server:
 zuul:
   routes:
     user:
-      path: /user/**
+      path: /users/**
       serviceId: user-service
       stripPrefix: false
     stock:
@@ -16,7 +16,7 @@ zuul:
       serviceId: stock-service
       stripPrefix: false
     order:
-      path: /order/**
+      path: /orders/**
       serviceId: order-service
       stripPrefix: false
     payment:

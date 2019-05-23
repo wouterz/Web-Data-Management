@@ -6,4 +6,5 @@ pluginManagement {
 //rootProject.name = 'web-data-basemangement'
 
 
-include 'user-service', 'order-service', 'stock-service', 'payment-service', 'eureka-server', 'zuul-server'
+include 'user-service', 'order-service', 'stock-service', 'payment-service',
+        'eureka-server', 'zuul-server'

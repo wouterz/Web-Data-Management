@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import service.user.storage.PaymentLocalRepository;
 
 @Service
-public class PaymentService {
+public class OrderService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -19,7 +19,7 @@ public class PaymentService {
     PaymentLocalRepository paymentLocalRepository;
 
     @Autowired
-    PaymentSender paymentSender;
+    OrderSender orderSender;
 
     public void process(final Object o) throws JsonProcessingException {
         LOGGER.info("Order processed: {}", mapper.writeValueAsString(o));

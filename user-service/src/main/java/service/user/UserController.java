@@ -27,15 +27,6 @@ public class UserController {
 
 
     @Autowired
-    private StockClient stockClient;
-
-    @Autowired
-    private OrderClient orderClient;
-
-    @Autowired
-    private PaymentClient paymentClient;
-
-    @Autowired
     private UserSender sender;
 
     @Autowired
@@ -45,7 +36,7 @@ public class UserController {
 
     @PostMapping("/user/create")
     public long create() {
-        LOGGER.info("Request: /user/create");
+        LOGGER.info("Request POST: /user/create");
         User user = new User(counter.getAndIncrement(), 0);
         boolean send = sender.send(user);
         LOGGER.info("Request: Message : " + user.toString() +" was sent: " + send);
@@ -56,18 +47,14 @@ public class UserController {
 
     @DeleteMapping("/user/{user_id}")
     public boolean remove(@PathVariable(value = "user_id") long user_id) {
-        LOGGER.info("Request: /user/remove/" + user_id);
-
-
-//        EXAMPLE RMI USAGE
-        stockClient.createStockItem("NewItem1");
+        LOGGER.info("Request DELETE: /user/remove/" + user_id);
 
         return userLocalRepository.delete(user_id);
     }
 
     @GetMapping("/user/{user_id}")
     public String find(@PathVariable(value = "user_id") long user_id) {
-        LOGGER.info("Request: user/" + user_id);
+        LOGGER.info("Request GET: user/" + user_id);
 
         return userLocalRepository.get(user_id).toString();
     }

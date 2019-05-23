@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import service.user.models.User;
 
 @Service
-public class PaymentSender {
+public class OrderSender {
 
     @Autowired
     private Source source;

@@ -1,4 +1,4 @@
-package service.user;
+package service.payment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,8 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
-import service.user.messaging.PaymentService;
-import service.user.models.User;
+import service.payment.messaging.PaymentService;
 
 @SpringBootApplication
 @EnableDiscoveryClient

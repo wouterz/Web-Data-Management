@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: stock-service
+    name: order-service
 
   rabbitmq:
     host: 127.0.0.1
