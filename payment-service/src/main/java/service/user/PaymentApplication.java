@@ -13,27 +13,27 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
-import service.user.messaging.UserService;
+import service.user.messaging.PaymentService;
 import service.user.models.User;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableBinding(Processor.class)
 @EnableFeignClients
-public class UserApplication {
+public class PaymentApplication {
 
     @Value("${spring.application.name}")
     private String appName;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentApplication.class);
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    private UserService service;
+    private PaymentService service;
 
 
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class, args);
+        SpringApplication.run(PaymentApplication.class, args);
     }
 
     @StreamListener(Processor.INPUT)

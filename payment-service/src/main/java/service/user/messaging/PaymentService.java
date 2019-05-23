@@ -6,23 +6,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import service.user.models.User;
-import service.user.storage.UserLocalRepository;
-
-import java.util.Collections;
+import service.user.storage.PaymentLocalRepository;
 
 @Service
-public class UserService {
+public class PaymentService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentService.class);
 
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    UserLocalRepository userLocalRepository;
+    PaymentLocalRepository paymentLocalRepository;
 
     @Autowired
-    UserSender userSender;
+    PaymentSender paymentSender;
 
     public void process(final Object o) throws JsonProcessingException {
         LOGGER.info("Order processed: {}", mapper.writeValueAsString(o));

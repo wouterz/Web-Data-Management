@@ -10,9 +10,28 @@ zuul:
     user:
       path: /user/**
       serviceId: user-service
-#    stock:
-#      path: /stock/**
-#      serviceId: stock-service
+      stripPrefix: false
+    stock:
+      path: /stock/**
+      serviceId: stock-service
+      stripPrefix: false
+    order:
+      path: /order/**
+      serviceId: order-service
+      stripPrefix: false
+    payment:
+      path: /payment/**
+      serviceId: payment-service
+      stripPrefix: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, routes
+  security:
+    enabled: false
+
 
 eureka:
   client:

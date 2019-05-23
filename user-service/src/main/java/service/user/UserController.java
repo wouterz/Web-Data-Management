@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.user.messaging.StockClient;
+import service.user.RMI.StockClient;
 import service.user.messaging.UserSender;
 import service.user.models.User;
 import service.user.storage.UserLocalRepository;
@@ -28,10 +28,10 @@ public class UserController {
     private StockClient stockClient;
 
     @Autowired
-    UserSender sender;
+    private UserSender sender;
 
     @Autowired
-    UserLocalRepository userLocalRepository;
+    private UserLocalRepository userLocalRepository;
 
 
 
