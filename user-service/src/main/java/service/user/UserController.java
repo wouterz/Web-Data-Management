@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import service.user.RMI.OrderClient;
+import service.user.RMI.PaymentClient;
 import service.user.RMI.StockClient;
 import service.user.messaging.UserSender;
 import service.user.models.User;
@@ -26,6 +28,12 @@ public class UserController {
 
     @Autowired
     private StockClient stockClient;
+
+    @Autowired
+    private OrderClient orderClient;
+
+    @Autowired
+    private PaymentClient paymentClient;
 
     @Autowired
     private UserSender sender;
@@ -49,7 +57,10 @@ public class UserController {
     @DeleteMapping("/user/{user_id}")
     public boolean remove(@PathVariable(value = "user_id") long user_id) {
         LOGGER.info("Request: /user/remove/" + user_id);
-        stockClient.createStockItem("pindas");
+
+
+//        EXAMPLE RMI USAGE
+        stockClient.createStockItem("NewItem1");
 
         return userLocalRepository.delete(user_id);
     }

@@ -14,7 +14,6 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
 import service.user.messaging.UserService;
-import service.user.models.User;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -37,9 +36,9 @@ public class UserApplication {
     }
 
     @StreamListener(Processor.INPUT)
-    public void receiveOrder(User user) throws JsonProcessingException {
-        LOGGER.info("Message received: {}", mapper.writeValueAsString(user));
-        service.process(user);
+    public void receiveOrder(Object o) throws JsonProcessingException {
+        LOGGER.info("User received message: {}", mapper.writeValueAsString(o));
+        service.process(o);
     }
 
 

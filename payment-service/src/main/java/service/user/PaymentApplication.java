@@ -37,9 +37,9 @@ public class PaymentApplication {
     }
 
     @StreamListener(Processor.INPUT)
-    public void receiveOrder(User user) throws JsonProcessingException {
-        LOGGER.info("Message received: {}", mapper.writeValueAsString(user));
-        service.process(user);
+    public void receiveOrder(Object o) throws JsonProcessingException {
+        LOGGER.info("Payment received message: {}", mapper.writeValueAsString(o));
+        service.process(o);
     }
 
 
