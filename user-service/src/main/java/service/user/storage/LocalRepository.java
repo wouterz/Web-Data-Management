@@ -1,13 +1,13 @@
-package service.payment.storage;
+package service.user.storage;
 
 import org.springframework.stereotype.Repository;
-import service.payment.models.User;
+import service.user.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class PaymentLocalRepository implements Dao {
+public class LocalRepository implements Dao {
 
     private List<User> Users = new ArrayList<>();
 

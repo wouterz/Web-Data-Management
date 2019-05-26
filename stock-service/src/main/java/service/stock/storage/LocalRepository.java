@@ -1,7 +1,7 @@
-package service.user.storage;
+package service.stock.storage;
 
 import org.springframework.stereotype.Repository;
-import service.user.models.User;
+import service.stock.models.User;
 
 import java.util.ArrayList;
 import java.util.List;

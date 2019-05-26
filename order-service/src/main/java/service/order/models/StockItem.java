@@ -1,4 +1,4 @@
-package service.user.models;
+package service.order.models;
 
 public class StockItem {
 

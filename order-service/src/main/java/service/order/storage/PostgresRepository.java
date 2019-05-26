@@ -1,9 +1,9 @@
-package service.payment.storage;
+package service.order.storage;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PaymentRedisRepository implements Dao {
+public class PostgresRepository implements Dao {
 
 
     @Override

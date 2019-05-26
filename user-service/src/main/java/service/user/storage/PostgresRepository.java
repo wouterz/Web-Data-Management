@@ -3,7 +3,7 @@ package service.user.storage;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRedisRepository implements Dao {
+public class PostgresRepository implements Dao {
 
 
     @Override

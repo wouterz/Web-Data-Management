@@ -1,4 +1,4 @@
-package service.user.storage;
+package service.order.storage;
 
 public interface Dao<T> {
 

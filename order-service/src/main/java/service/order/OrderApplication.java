@@ -13,7 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
-import service.user.messaging.OrderService;
+import service.order.messaging.OrderService;
 
 @SpringBootApplication
 @EnableDiscoveryClient

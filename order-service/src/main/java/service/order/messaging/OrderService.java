@@ -1,4 +1,4 @@
-package service.user.messaging;
+package service.order.messaging;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import service.user.storage.PaymentLocalRepository;
+import service.order.messaging.OrderSender;
+import service.order.storage.LocalRepository;
 
 @Service
 public class OrderService {
@@ -16,7 +17,7 @@ public class OrderService {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    PaymentLocalRepository paymentLocalRepository;
+    LocalRepository localRepository;
 
     @Autowired
     OrderSender orderSender;

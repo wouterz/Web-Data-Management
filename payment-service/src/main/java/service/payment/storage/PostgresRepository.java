@@ -1,9 +1,9 @@
-package service.user.storage;
+package service.payment.storage;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PaymentPostgresRepository implements Dao {
+public class PostgresRepository implements Dao {
 
 
     @Override

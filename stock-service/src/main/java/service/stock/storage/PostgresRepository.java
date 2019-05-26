@@ -1,4 +1,4 @@
-package service.user.storage;
+package service.stock.storage;
 
 import org.springframework.stereotype.Repository;
 

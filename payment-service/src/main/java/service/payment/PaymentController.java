@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.payment.messaging.PaymentSender;
-import service.payment.storage.PaymentLocalRepository;
+import service.payment.storage.LocalRepository;
 
 @RestController
 public class PaymentController {
@@ -21,7 +21,7 @@ public class PaymentController {
 
 
     @Autowired
-    private PaymentLocalRepository paymentLocalRepository;
+    private LocalRepository localRepository;
 
     @Autowired
     private PaymentSender sender;
@@ -31,7 +31,7 @@ public class PaymentController {
     public long create(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
 
-        return paymentLocalRepository.create(counter.get());
+        return localRepository.create(counter.get());
     }
 
 
@@ -39,14 +39,14 @@ public class PaymentController {
     public long cancel(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/cancel/ user " + user_id + "/ order " + order_id);
 
-        return paymentLocalRepository.create(counter.get());
+        return localRepository.create(counter.get());
     }
 
     @GetMapping("/payment/status/{order_id}")
     public long status(@PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/status/order " + order_id);
 
-        return paymentLocalRepository.create(counter.get());
+        return localRepository.create(counter.get());
     }
 
 }

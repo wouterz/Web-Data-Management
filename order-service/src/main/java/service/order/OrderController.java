@@ -3,14 +3,14 @@ package service.order;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import service.user.models.Order;
+import service.order.models.Order;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 
 @RestController
-// Catch everything starting with /orders
-@RequestMapping("/orders")
+// Catch everything starting with /order
+@RequestMapping("/order")
 public class OrderController {
 
     private final AtomicLong counter = new AtomicLong();

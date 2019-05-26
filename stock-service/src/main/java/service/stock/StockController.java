@@ -2,9 +2,12 @@ package service.stock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import service.stock.models.StockItem;
+import service.stock.storage.Dao;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,6 +22,9 @@ public class StockController {
 
     // Temporary way to generate ID
     private final AtomicLong counter = new AtomicLong();
+
+    @Autowired
+    private Dao<StockItem> localRepository;
 
     // Create a new stock item by supplying the name
     @RequestMapping(value= "/stock/item/create", method=POST)

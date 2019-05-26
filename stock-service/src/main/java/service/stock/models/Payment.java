@@ -1,4 +1,4 @@
-package service.user.models;
+package service.stock.models;
 
 public class Payment {
 

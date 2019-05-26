@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import service.user.models.User;
-import service.user.storage.UserLocalRepository;
-
-import java.util.Collections;
+import service.user.storage.LocalRepository;
 
 @Service
 public class UserService {
@@ -19,7 +16,7 @@ public class UserService {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    UserLocalRepository userLocalRepository;
+    LocalRepository localRepository;
 
     @Autowired
     UserSender userSender;

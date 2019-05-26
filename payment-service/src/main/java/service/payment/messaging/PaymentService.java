@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import service.payment.storage.PaymentLocalRepository;
+import service.payment.storage.LocalRepository;
 
 @Service
 public class PaymentService {
@@ -16,7 +16,7 @@ public class PaymentService {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    PaymentLocalRepository paymentLocalRepository;
+    LocalRepository localRepository;
 
     @Autowired
     PaymentSender paymentSender;

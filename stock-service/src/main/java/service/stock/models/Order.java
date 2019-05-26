@@ -1,4 +1,4 @@
-package service.user.models;
+package service.stock.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;

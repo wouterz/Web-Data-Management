@@ -1,13 +1,13 @@
-package service.user.storage;
+package service.order.storage;
 
 import org.springframework.stereotype.Repository;
-import service.user.models.User;
+import service.order.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class UserLocalRepository implements Dao {
+public class LocalRepository implements Dao {
 
     private List<User> Users = new ArrayList<>();
 
