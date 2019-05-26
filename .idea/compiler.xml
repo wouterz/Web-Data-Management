@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="web-data-management.eureka-server.main" target="1.8" />
+      <module name="web-data-management.eureka-server.test" target="1.8" />
+      <module name="web-data-management.order-service.main" target="1.8" />
+      <module name="web-data-management.order-service.test" target="1.8" />
+      <module name="web-data-management.payment-service.main" target="1.8" />
+      <module name="web-data-management.payment-service.test" target="1.8" />
+      <module name="web-data-management.stock-service.main" target="1.8" />
+      <module name="web-data-management.stock-service.test" target="1.8" />
+      <module name="web-data-management.user-service.main" target="1.8" />
+      <module name="web-data-management.user-service.test" target="1.8" />
+      <module name="web-data-management.zuul-server.main" target="1.8" />
+      <module name="web-data-management.zuul-server.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
