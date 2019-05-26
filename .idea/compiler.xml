@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="demo.eureka-server.main" target="11" />
+      <module name="demo.eureka-server.test" target="11" />
+      <module name="demo.main" target="1.8" />
+      <module name="demo.order-service.main" target="11" />
+      <module name="demo.order-service.test" target="11" />
+      <module name="demo.stock-service.main" target="11" />
+      <module name="demo.stock-service.test" target="11" />
+      <module name="demo.test" target="1.8" />
+      <module name="demo.user-service.main" target="11" />
+      <module name="demo.user-service.test" target="11" />
+      <module name="demo.zuul-server.main" target="11" />
+      <module name="demo.zuul-server.test" target="11" />
+      <module name="web-data-management.common.main" target="1.8" />
+      <module name="web-data-management.common.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
