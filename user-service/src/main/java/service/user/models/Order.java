@@ -47,6 +47,7 @@ public class Order implements Serializable{
     public boolean getPaymentStatus(){
         return isPayed;
     }
+    
     // TODO: implement
     public boolean addItem() {
         return true;
