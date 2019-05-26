@@ -1,6 +1,6 @@
 # Web-Data-Management
 
-
+git a
 Run all services
 * Eureka (discovery)
 * Zuul (gateway)
