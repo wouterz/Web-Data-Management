@@ -9,7 +9,4 @@ import service.order.models.StockItem;
 @FeignClient("user-service")
 public interface UserClient {
 
-    @RequestMapping(method = RequestMethod.POST, value = "/stock/item/create/")
-    StockItem createStockItem(@RequestParam("name") String name);
-
 }

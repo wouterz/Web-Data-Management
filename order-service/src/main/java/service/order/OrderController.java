@@ -1,9 +1,11 @@
 package service.order;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import service.order.RMI.PaymentClient;
+import service.order.RMI.StockClient;
 import service.order.models.Order;
+import service.order.storage.Dao;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -14,19 +16,25 @@ import java.util.concurrent.atomic.AtomicLong;
 public class OrderController {
 
     private final AtomicLong counter = new AtomicLong();
-    
+
+    @Autowired
+    private
+    Dao<Order> localRepository;
+
+    @Autowired
+    private
+    StockClient stockClient;
+
+    @Autowired
+    private
+    PaymentClient paymentClient;
 
     // @RequestMapping(method=GET) or POST etc. to narrow mapping. without method=.. it maps all HTTP ops.
     // Pathvariable => straight up
     // POST - create order for userId, return orderId
-    @RequestMapping("/create/{userId}")
-    public long orderCreate(@PathVariable long userId) {
-        // create new order
-        Order o = new Order(userId, counter.incrementAndGet());
-        // save order
-//        jedis.set(String.valueOf(o.getorderId()), String.valueOf(o.getUserId()));
-        // return new orderId
-        return o.getorderId();
+    @PostMapping("/create/{userId}")
+    public long orderCreate(@PathVariable(value = "userId") long userId) {
+        return localRepository.create(userId);
     }
 
 
@@ -34,49 +42,52 @@ public class OrderController {
     // RequestParam => orders/remove?orderId={id}
     // DELETE - deletes order with orderId
     // Return success/failure ?
-    @RequestMapping("/remove/{orderId}")
-    public boolean orderRemove(@PathVariable long orderId) {
-        // jedis.del() returns number of deleted items
-//        long deleted = jedis.del(orderId);
-//        if (deleted>0){
-//            return true;
-//        }
-        return false;
+    @DeleteMapping("/remove/{orderId}")
+    public boolean orderRemove(@PathVariable(value = "orderId") long orderId) {
+        return localRepository.delete(orderId);
     }
 
 
-    @RequestMapping("/find/orderId")
+    @GetMapping("/find/orderId")
     // GET - retrieve info about orderId: pay status, items, userId
     public Order orderFind(@PathVariable long orderId) {
-        // retrieve order
-        Order o = new Order(123, orderId);
-        // return order details
-        return new Order(123, counter.incrementAndGet());
+        return localRepository.get(orderId);
     }
 
-    @RequestMapping("/addItem/{orderid}/{itemid}")
+    @PostMapping("/addItem/{orderId}/{itemId}")
     // POST - add item with itemId to orderId
-    public Order orderAddItem(@PathVariable long orderId, @PathVariable String itemId) {
+    public boolean orderAddItem(@PathVariable(value = "orderId") long orderId, @PathVariable(value = "itemId") long itemId) {
         // get order - orderId
-        // add item:itemId to order
-        return new Order(123, counter.incrementAndGet());
+        Order o = localRepository.get(orderId);
+
+        return localRepository.update(orderId, o.addItem(itemId));
     }
 
-    @RequestMapping("/removeItem/{orderid}/{itemid}")
+    @DeleteMapping("/removeItem/{orderId}/{itemId}")
     // DELETE/POST - remove itemId from orderId
-    public Order orderRemoveItem(@PathVariable long orderId, @PathVariable String itemId) {
+    public boolean orderRemoveItem(@PathVariable(value = "orderId") long orderId, @PathVariable(value = "itemId") long itemId) {
         // get order - orderId
+        Order o = localRepository.get(orderId);
         // remove item:itemId from order
-        return new Order(123, counter.incrementAndGet());
+        return localRepository.update(orderId, o.removeItem(itemId));
     }
 
     // POST - make payment (call pay service), subtract stock(stock service)
     //          return status (success/fail)
-    @RequestMapping("/checkout/{orderid}")
-    public Order orderCheckout(@PathVariable long orderId) {
+    @PostMapping("/checkout/{orderId}")
+    public boolean orderCheckout(@PathVariable(value = "orderId") long orderId) {
         // get order - orderId
+        Order o = localRepository.get(orderId);
+
         // checkout order
-        return new Order(123, counter.incrementAndGet());
+        long paymentId = paymentClient.create(o.getUserId(), orderId);
+
+        // TODO should be improved
+        for (long item : o.getItems()) {
+            stockClient.subtractStock(item, 1);
+        }
+
+        return true;
     }
 
 }

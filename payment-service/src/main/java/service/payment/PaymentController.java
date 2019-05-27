@@ -7,8 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.payment.messaging.PaymentSender;
-import service.payment.storage.LocalRepository;
+import service.payment.RMI.OrderClient;
+import service.payment.RMI.UserClient;
+import service.payment.models.Order;
+import service.payment.models.Payment;
+import service.payment.storage.Dao;
 
 @RestController
 public class PaymentController {
@@ -21,17 +24,31 @@ public class PaymentController {
 
 
     @Autowired
-    private LocalRepository localRepository;
+    private Dao<Payment> localRepository;
 
     @Autowired
-    private PaymentSender sender;
+    private UserClient userClient;
+
+    @Autowired
+    private OrderClient orderClient;
 
 
     @PostMapping("/payment/pay/{user_id}/{order_id}")
     public long create(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
 
-        return localRepository.create(counter.get());
+//        TODO
+//        totalCost = orderClient.
+        int totalCost = 20;
+
+//        subtract credits
+        if (userClient.subtractCredits(user_id, totalCost)) {
+            return localRepository.create(counter.getAndIncrement());
+        } else {
+            return -1;
+        }
+
+
     }
 
 
@@ -39,14 +56,21 @@ public class PaymentController {
     public long cancel(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/cancel/ user " + user_id + "/ order " + order_id);
 
+//        TODO - reverse of create
+        //        TODO get by orderID
+        Payment payment = localRepository.get(order_id);
+        boolean creditSucces = userClient.addCredits(user_id, payment.getCredits());
+
+
         return localRepository.create(counter.get());
     }
 
     @GetMapping("/payment/status/{order_id}")
-    public long status(@PathVariable(value = "order_id") long order_id) {
+    public Payment.PaymentStatus status(@PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/status/order " + order_id);
 
-        return localRepository.create(counter.get());
+//        TODO get by orderID
+        return localRepository.get(order_id).getPaymentStatus();
     }
 
 }

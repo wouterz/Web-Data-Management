@@ -4,15 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-// import org.springframework.stereotype.Repository;
-// import org.springframework.data.redis.core.RedisHash;
-
-
-// @RedisHash("Order")
 public class Order implements Serializable{
-
-    // ??
-    private static final long serialVersionUID = 1L;
 
     // Identifier for this order
     private final long orderId;
@@ -47,9 +39,17 @@ public class Order implements Serializable{
     public boolean getPaymentStatus(){
         return isPayed;
     }
-    // TODO: implement
-    public boolean addItem() {
-        return true;
+
+    public Order addItem(long itemId) {
+        this.items.add(itemId);
+
+        return this;
+    }
+
+    public Order removeItem(long itemId) {
+        this.items.remove(itemId);
+
+        return this;
     }
 
 }
