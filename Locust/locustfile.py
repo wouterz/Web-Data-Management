@@ -2,17 +2,17 @@ from locust import HttpLocust, TaskSet, task
 import random
 
 class Order:
-    ''' Constructor '''
+    # Constructor
     def __init__(self, userid, orderid):
         self.userid = userid
         self.orderid = orderid
         self.items = []
         self.paid = False
 
-    def addItem(itemid):
+    def addItem(self, itemid):
         self.items.append(itemid)
 
-    def setPaid(bool):
+    def setPaid(self, bool):
         self.paid = bool
 
 class UserBehavior(TaskSet):
@@ -30,8 +30,8 @@ class UserBehavior(TaskSet):
         self.orders = []
 
         # Create an initial order
-        response = self.client.post("/orders/create/" + self.userid)
-        self.orders.append(self.userid, response.text)
+        response = self.client.post("/orders/create/", {"user_id": self.userid})
+        self.orders.append(Order(self.userid, response.text))
 
         # Make sure that at least one item exists
         response = self.client.post("/stock/item/create")
@@ -40,5 +40,26 @@ class UserBehavior(TaskSet):
     def on_stop(self):
         """ This function is called when the taskset is stopping """
         self.client.delete("/users/remove/" + self.userid)
+
+    
+    """ List of possible user tasks, this should roughly emulate how a
+    normal user would use the system, creating new orders, adding items to orders
+    and paying for / cancelling payments for orders. """
+
+    # Find user details (for the current user)
+    @task
+    def findCurrentUser(self):
+        self.client.get("/users/find/" + self.userid)
+
+class WebsiteUser(HttpLocust):
+    task_set = UserBehavior
+    min_wait = 1000
+    max_wait = 10000
+
+
+
+
+    
+    
 
     
