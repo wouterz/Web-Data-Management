@@ -48,12 +48,12 @@ class UserBehavior(TaskSet):
 
     """ Users service """
     # Find user details (for the current user)
-    @task
+    @task(10)
     def findCurrentUser(self):
         self.client.get("/users/find/" + self.userid)
 
     # Find credit (for the current user)
-    @task
+    @task(10)
     def findCurrentCredit(self):
         self.client.get("/users/credit/" + self.userid)
 
@@ -61,10 +61,27 @@ class UserBehavior(TaskSet):
     # thus this endpoint is not called directly by the locust client
     
     # Add some random amount of credit to the account
-    @task
+    @task(1)
     def addCredit(self):
         self.client.post("/users/credit/add", {"user_id": self.userid, "amount": random.randint(1,100)})
 
+    """ Order Service """
+    # Create new order for this user
+    @task(5)
+    def createNewOrder(self):
+        response = self.client.post("/orders/create", {"user_id": self.userid})
+        orderObj = Order(self.userid, response.text)
+        self.orders.append(orderObj)
+
+    # Delete an order for this user if possible
+    @task(1)
+    def deleteRandomOrder(self):
+        if len(self.orders > 0):
+            index = random.randint(0, len(self.orders)-1)
+            self.client.delete("/orders/remove/" + self.orders[index].orderid)
+            self.orders.pop(index)
+
+    
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
     min_wait = 1000
