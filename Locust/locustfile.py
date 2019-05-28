@@ -46,10 +46,24 @@ class UserBehavior(TaskSet):
     normal user would use the system, creating new orders, adding items to orders
     and paying for / cancelling payments for orders. """
 
+    """ Users service """
     # Find user details (for the current user)
     @task
     def findCurrentUser(self):
         self.client.get("/users/find/" + self.userid)
+
+    # Find credit (for the current user)
+    @task
+    def findCurrentCredit(self):
+        self.client.get("/users/credit/" + self.userid)
+
+    # subtract credit should probably not be called without actually paying for an order
+    # thus this endpoint is not called directly by the locust client
+    
+    # Add some random amount of credit to the account
+    @task
+    def addCredit(self):
+        self.client.post("/users/credit/add", {"user_id": self.userid, "amount": random.randint(1,100)})
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
