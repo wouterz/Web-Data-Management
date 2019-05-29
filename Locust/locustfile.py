@@ -134,7 +134,7 @@ class UserBehavior(TaskSet):
     def checkoutRandomOrder(self):
         unpaidOrders = self.findOrdersWithStatus(False)
 
-        if len (unpaidOrders) > 0:
+        if len(unpaidOrders) > 0:
             randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
 
             self.client.post("/orders/checkout", {"order_id": randomOrder.orderid})
@@ -142,7 +142,29 @@ class UserBehavior(TaskSet):
             # !! SHOULD CHECK IF WE ACTUALLY GOT BACK SUCCESS OR FAILURE!
             randomOrder.setPaid(True)
 
-    
+    """ Stock Service """
+    # Get availability for a random item
+    @task(10)
+    def getRandomItemAvailability(self):
+        if len(self.orders > 0):
+            randomOrder = self.orders[random.randint(0, len(self.orders)-1)]
+            randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
+
+            self.client.get("/stock/availability/" + randomItem)
+
+    # Subtracting manually from stock should probabily not be called by a client
+
+    # Clients can add stock for an item in a random unpaid item (should this be called
+    # by the client?)
+    @task(5)
+    def addStockRandomItem(self):
+        unpaidOrders = self.findOrdersWithStatus(False)
+
+        if len(unpaidOrders) > 0:
+            randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
+            randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
+            stockAmount = random.randint(1,100)
+            self.client.post("/stock/add", {"item_id": randomItem, "number": stockAmount})
 
 
 
