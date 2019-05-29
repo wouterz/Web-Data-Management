@@ -166,10 +166,25 @@ class UserBehavior(TaskSet):
             stockAmount = random.randint(1,100)
             self.client.post("/stock/add", {"item_id": randomItem, "number": stockAmount})
 
+    """ Payment Service """
+    # Pay should not be called directly, is tested by checkout from orderservice
 
+    # Cancel the payment of a specific order
+    @task(1)
+    def cancelRandomPaidOrder(self):
+        paidOrders = self.findOrdersWithStatus(True)
 
-
-
+        if len(paidOrders) > 0:
+            randomOrder = paidOrders[random.randint(0, len(paidOrders)-1)]
+            self.client.post("/payment/cancelPayment", {"user_id": self.userid, "order_id": randomOrder.orderid})
+            randomOrder.setPaid(False)
+    
+    # Check the status of a random order
+    @task(10)
+    def getPaymentStatusRandomOrder(self):
+        if len(self.orders) > 0:
+            randomOrder = self.orders[random.randint(0, len(self.orders)-1)]
+            self.client.get("/payment/status/" + randomOrder.orderid)
     
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
