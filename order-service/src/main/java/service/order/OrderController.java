@@ -90,4 +90,10 @@ public class OrderController {
         return true;
     }
 
+    @GetMapping("")
+    public String endpoint() {
+
+        return "This is the order service";
+    }
+
 }

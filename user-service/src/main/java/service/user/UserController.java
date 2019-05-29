@@ -51,6 +51,8 @@ public class UserController {
         return localRepository.get(user_id).getCredits();
     }
 
+    
+
     @PostMapping("/user/{user_id}/credit/add/{amount}")
     public boolean addCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount) {
         User user = localRepository.get(user_id);
@@ -72,6 +74,12 @@ public class UserController {
         localRepository.update(user_id, user);
 
         return true;
+    }
+
+    @GetMapping("/user")
+    public String endpoint() {
+
+        return "This is the user service";
     }
 
 

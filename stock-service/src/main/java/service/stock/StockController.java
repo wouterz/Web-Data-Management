@@ -3,10 +3,7 @@ package service.stock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*
 import service.stock.models.StockItem;
 import service.stock.storage.Dao;
 
@@ -68,5 +65,11 @@ public class StockController {
 
         // Save the changes to the database
         return localRepository.update(id, item);
+    }
+
+    @GetMapping("/stock")
+    public String endpoint() {
+
+        return "This is the stock service";
     }
 }

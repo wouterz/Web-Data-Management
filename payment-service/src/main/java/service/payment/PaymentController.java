@@ -73,4 +73,11 @@ public class PaymentController {
         return localRepository.get(order_id).getPaymentStatus();
     }
 
+    @GetMapping("/payment")
+    public String endpoint() {
+
+        return "This is the payment service";
+    }
+    
+
 }
