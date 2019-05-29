@@ -12,6 +12,9 @@ class Order:
     def addItem(self, itemid):
         self.items.append(itemid)
 
+    def removeItem(self, itemIndex):
+        self.items.pop(itemIndex)
+
     def setPaid(self, bool):
         self.paid = bool
 
@@ -30,7 +33,7 @@ class UserBehavior(TaskSet):
         self.orders = []
 
         # Create an initial order
-        response = self.client.post("/orders/create/", {"user_id": self.userid})
+        response = self.client.post("/orders/create", {"user_id": self.userid})
         self.orders.append(Order(self.userid, response.text))
 
         # Make sure that at least one item exists
@@ -40,6 +43,14 @@ class UserBehavior(TaskSet):
     def on_stop(self):
         """ This function is called when the taskset is stopping """
         self.client.delete("/users/remove/" + self.userid)
+
+    # Helper function to find random order with given status
+    def findOrdersWithStatus(self, paid):
+        res = []
+        for order in self.orders:
+            if order.paid == paid:
+                res.append(order)
+        return res
 
     
     """ List of possible user tasks, this should roughly emulate how a
@@ -76,10 +87,66 @@ class UserBehavior(TaskSet):
     # Delete an order for this user if possible
     @task(1)
     def deleteRandomOrder(self):
-        if len(self.orders > 0):
+        if len(self.orders) > 0:
             index = random.randint(0, len(self.orders)-1)
             self.client.delete("/orders/remove/" + self.orders[index].orderid)
             self.orders.pop(index)
+
+    # Find the details for a random order for the current user if possible
+    @task(10)
+    def findRandomOrder(self):
+        if len(self.orders) > 0:
+            index = random.randint(0, len(self.orders)-1)
+            self.client.get("/orders/find/" + self.orders[index].orderid)
+
+    # Create a new item and add it to an unpaid order
+    @task(10)
+    def addItemToOrder(self):
+        unpaidOrders = self.findOrdersWithStatus(False)
+
+        if len(unpaidOrders) > 0:
+            randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
+            randomID = randomOrder.orderid
+
+            response = self.client.post("/stock/item/create")
+            itemID = response.text
+
+            self.client.post("/orders/addItem", {"order_id": randomID, "item_id": itemID})
+            randomOrder.addItem(itemID)
+
+    # Remove a random item from an unpaid order
+    @task(2)
+    def removeRandomItemOrder(self):
+        unpaidOrders = self.findOrdersWithStatus(False)
+
+        if len(unpaidOrders) > 0:
+            randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
+
+            if len(randomOrder.items) > 0:
+                randomItemIndex = random.randint(0, len(randomOrder.items)-1)
+                randomItemID = randomOrder.items[randomItemIndex]
+
+                self.client.delete("/orders/removeItem/" + randomOrder.orderid + "/" + randomItemID)
+                randomOrder.removeItem(randomItemIndex)
+
+    # Checkout a random unpaid order
+    @task(2)
+    def checkoutRandomOrder(self):
+        unpaidOrders = self.findOrdersWithStatus(False)
+
+        if len (unpaidOrders) > 0:
+            randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
+
+            self.client.post("/orders/checkout", {"order_id": randomOrder.orderid})
+
+            # !! SHOULD CHECK IF WE ACTUALLY GOT BACK SUCCESS OR FAILURE!
+            randomOrder.setPaid(True)
+
+    
+
+
+
+
 
     
 class WebsiteUser(HttpLocust):
