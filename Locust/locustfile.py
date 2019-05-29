@@ -148,9 +148,10 @@ class UserBehavior(TaskSet):
     def getRandomItemAvailability(self):
         if len(self.orders) > 0:
             randomOrder = self.orders[random.randint(0, len(self.orders)-1)]
-            randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
+            if len(randomOrder.items) > 0:
+                randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
 
-            self.client.get("/stock/availability/" + randomItem)
+                self.client.get("/stock/availability/" + randomItem)
 
     # Subtracting manually from stock should probabily not be called by a client
 
@@ -162,9 +163,10 @@ class UserBehavior(TaskSet):
 
         if len(unpaidOrders) > 0:
             randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
-            randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
-            stockAmount = random.randint(1,100)
-            self.client.post("/stock/add", {"item_id": randomItem, "number": stockAmount})
+            if len(randomOrder.items) > 0:
+                randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
+                stockAmount = random.randint(1,100)
+                self.client.post("/stock/add", {"item_id": randomItem, "number": stockAmount})
 
     """ Payment Service """
     # Pay should not be called directly, is tested by checkout from orderservice
