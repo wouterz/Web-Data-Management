@@ -146,7 +146,7 @@ class UserBehavior(TaskSet):
     # Get availability for a random item
     @task(10)
     def getRandomItemAvailability(self):
-        if len(self.orders > 0):
+        if len(self.orders) > 0:
             randomOrder = self.orders[random.randint(0, len(self.orders)-1)]
             randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
 
