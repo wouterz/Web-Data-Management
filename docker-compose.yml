@@ -11,6 +11,7 @@ services:
     build: ./zuul-server
     ports:
       - "8080:8762"
+      - "8762:8762"
     networks:
       - spring
     depends_on:
