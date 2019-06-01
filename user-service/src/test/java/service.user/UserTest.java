@@ -27,6 +27,7 @@ public class UserTest {
     @Autowired
     private MessageCollector messageCollector;
 
+/*
     @Test
     @SuppressWarnings("unchecked")
     public void testProcessing() {
@@ -35,6 +36,6 @@ public class UserTest {
         Message<Object> received = (Message<Object>) messageCollector.forChannel(processor.output()).poll();
         LOGGER.info("Order response received: {}", received.getPayload());
         assertNotNull(received.getPayload());
-    }
+    }*/
 
 }
