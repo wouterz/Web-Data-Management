@@ -1,28 +1,42 @@
 package service.user.storage;
 
+import javax.annotation.Resource;
+
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Repository;
+
+import service.user.models.User;
 
 @Repository
 public class RedisRepository implements Dao {
 
+	private static final String KEY = "users";
 
-    @Override
-    public long create(long id) {
-        return 0;
-    }
+	@Resource(name = "redisTemplate")
+	private HashOperations<String, Long, User> hashOps;
 
-    @Override
-    public Object get(long id) {
-        return null;
-    }
+	@Override
+	public long create(long id) {
+		User user = new User(id, 0);
+		hashOps.putIfAbsent(KEY, id, user);
+		return id;
+	}
 
-    @Override
-    public Object update(long id, Object o) {
-        return null;
-    }
+	@Override
+	public Object get(long id) {
+		User user = hashOps.get(KEY, id);
+		return user;
+	}
 
-    @Override
-    public boolean delete(long id) {
-        return false;
-    }
+	@Override
+	public Object update(long id, Object user) {
+		hashOps.put(KEY, id, (User) user);
+		return user;
+	}
+
+	@Override
+	public boolean delete(long id) {
+		hashOps.delete(KEY, id);
+        return hashOps.get(KEY, id) == null;
+	}
 }
