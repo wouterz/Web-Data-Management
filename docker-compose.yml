@@ -30,17 +30,41 @@ services:
       - eureka
     links:
       - eureka
-      - redis
+      - redis-user
     environment:
       eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
 
-  redis:
+  stock:
+    build: ./stock-service
+    ports:
+      - "7201:80"
+    networks:
+      - spring
+    depends_on:
+      - eureka
+    links:
+      - eureka
+      - redis-stock
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+
+  redis-user:
     image: "redis:alpine"
-    command: [ "redis-server", "--protected-mode", "no", "--appendonly", "yes" ]
+    command: [ "redis-server", "--protected-mode", "no", "--appendonly", "yes"]
     volumes:
       - /data
     ports:
      - "6379:6379"
+    networks:
+      - spring
+    
+  redis-stock:
+    image: "redis:alpine"
+    command: [ "redis-server", "--protected-mode", "no", "--appendonly", "yes", "--port", "6380"  ]
+    volumes:
+      - /data
+    ports:
+     - "6380:6380"
     networks:
       - spring
 

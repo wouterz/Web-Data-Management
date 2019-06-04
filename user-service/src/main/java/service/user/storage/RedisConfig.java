@@ -25,7 +25,7 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisConfig {
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("redis", 6379);
+		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("redis-user", 6379);
 		return new JedisConnectionFactory(redisStandaloneConfiguration);
 	}
 

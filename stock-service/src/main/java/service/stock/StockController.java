@@ -3,9 +3,9 @@ package service.stock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.*;
 import service.stock.models.StockItem;
-import service.stock.storage.Dao;
+import service.stock.storage.RedisRepository;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -22,7 +22,7 @@ public class StockController {
     private final AtomicLong counter = new AtomicLong();
 
     @Autowired
-    private Dao<StockItem> localRepository;
+    private RedisRepository localRepository;
 
     // Create a new stock item by supplying the name
     @RequestMapping(value= "/stock/item/create", method=POST)
@@ -37,7 +37,7 @@ public class StockController {
     public int getStockItem(@PathVariable(value="id") long id) {
         // Should get Stock item from database
 
-        return localRepository.get(id).getStock();
+        return ((StockItem)localRepository.get(id)).getStock();
     }
 
     // Add to the stock of an item by supplying the id
@@ -58,13 +58,13 @@ public class StockController {
     private StockItem updateStock(long id, int amount) {
         // First it should get the stock item from the database here
         // We dont have a database connection yet, so we will make a placeholder stock item
-        StockItem item = localRepository.get(id);
+        StockItem item = (StockItem)localRepository.get(id);
 
         // Change stock
         item.addToStock(amount);
 
         // Save the changes to the database
-        return localRepository.update(id, item);
+        return (StockItem)localRepository.update(id, item);
     }
 
     @GetMapping("/stock")
