@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.user.models.User;
 import service.user.storage.Dao;
+import service.user.storage.RedisRepository;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,7 +21,7 @@ public class UserController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    private Dao<User> localRepository;
+    private RedisRepository localRepository;
 
     @PostMapping("/user/create")
     public long create() {
@@ -41,21 +42,21 @@ public class UserController {
     public User find(@PathVariable(value = "user_id") long user_id) {
         LOGGER.info("Request GET: user/" + user_id);
 
-        return localRepository.get(user_id);
+        return (User)localRepository.get(user_id);
     }
 
     @GetMapping("/user/{user_id}/credit")
     public long getCredits(@PathVariable(value = "user_id") long user_id) {
         LOGGER.info("Request: user/" + user_id +"/credit");
 
-        return localRepository.get(user_id).getCredits();
+        return ((User)(localRepository.get(user_id))).getCredits();
     }
 
     
 
     @PostMapping("/user/{user_id}/credit/add/{amount}")
     public boolean addCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount) {
-        User user = localRepository.get(user_id);
+        User user = (User)localRepository.get(user_id);
         user.setCredits(user.getCredits() + amount);
         localRepository.update(user_id, user);
 
@@ -64,7 +65,7 @@ public class UserController {
 
     @PostMapping("/user/{user_id}/credit/subtract/{amount}")
     public boolean subtractCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount) {
-        User user = localRepository.get(user_id);
+        User user = (User)localRepository.get(user_id);
 
         if (user.getCredits() > amount) {
             return false;
