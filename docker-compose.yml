@@ -23,7 +23,7 @@ services:
   user:
     build: ./user-service
     ports:
-      - "7200:80"
+      - "0:80"
     networks:
       - spring
     depends_on:
