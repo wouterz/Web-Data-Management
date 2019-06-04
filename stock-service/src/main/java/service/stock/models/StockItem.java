@@ -1,6 +1,9 @@
 package service.stock.models;
 
-public class StockItem {
+import java.io.Serializable;
+
+public class StockItem implements Serializable {
+	private static final long serialVersionUID = 1L;
 
     private final long id;
     private final String name;

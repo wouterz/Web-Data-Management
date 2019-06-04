@@ -56,7 +56,7 @@ public class OrderController {
 
     @PostMapping("/addItem/{orderId}/{itemId}")
     // POST - add item with itemId to orderId
-    public boolean orderAddItem(@PathVariable(value = "orderId") long orderId, @PathVariable(value = "itemId") long itemId) {
+    public Order orderAddItem(@PathVariable(value = "orderId") long orderId, @PathVariable(value = "itemId") long itemId) {
         // get order - orderId
         Order o = localRepository.get(orderId);
 
@@ -65,7 +65,7 @@ public class OrderController {
 
     @DeleteMapping("/removeItem/{orderId}/{itemId}")
     // DELETE/POST - remove itemId from orderId
-    public boolean orderRemoveItem(@PathVariable(value = "orderId") long orderId, @PathVariable(value = "itemId") long itemId) {
+    public Order orderRemoveItem(@PathVariable(value = "orderId") long orderId, @PathVariable(value = "itemId") long itemId) {
         // get order - orderId
         Order o = localRepository.get(orderId);
         // remove item:itemId from order
