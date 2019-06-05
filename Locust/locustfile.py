@@ -25,24 +25,20 @@ class UserBehavior(TaskSet):
         It should create a new user with a random amount of credit
         and save the userid for future requests """
 
-        userResponse = self.client.post("/users/create")
+        userResponse = self.client.post("/user/create")
         self.userid = userResponse.text
-        self.client.post("/users/credit/add", {"user_id": self.userid, "amount": random.randint(1,1000)})
+        self.client.post("/user/" + self.userid + "/credit/add/" + str(random.randint(1,1000)))
 
         # Create a list of orders for this user
         self.orders = []
 
         # Create an initial order
-        response = self.client.post("/orders/create", {"user_id": self.userid})
+        response = self.client.post("/order/create/" + self.userid)
         self.orders.append(Order(self.userid, response.text))
 
         # Make sure that at least one item exists
         response = self.client.post("/stock/item/create")
         self.orders[0].addItem(response.text)
-
-    def on_stop(self):
-        """ This function is called when the taskset is stopping """
-        self.client.delete("/users/remove/" + self.userid)
 
     # Helper function to find random order with given status
     def findOrdersWithStatus(self, paid):
@@ -61,12 +57,12 @@ class UserBehavior(TaskSet):
     # Find user details (for the current user)
     @task(10)
     def findCurrentUser(self):
-        self.client.get("/users/find/" + self.userid)
+        self.client.get("/user/" + self.userid)
 
     # Find credit (for the current user)
     @task(10)
     def findCurrentCredit(self):
-        self.client.get("/users/credit/" + self.userid)
+        self.client.get("/user/" + self.userid + "/credit")
 
     # subtract credit should probably not be called without actually paying for an order
     # thus this endpoint is not called directly by the locust client
@@ -74,13 +70,13 @@ class UserBehavior(TaskSet):
     # Add some random amount of credit to the account
     @task(1)
     def addCredit(self):
-        self.client.post("/users/credit/add", {"user_id": self.userid, "amount": random.randint(1,100)})
+        self.client.post("/user/" + self.userid + "/credit/add/" + str(random.randint(1,100)))
 
     """ Order Service """
     # Create new order for this user
     @task(5)
     def createNewOrder(self):
-        response = self.client.post("/orders/create", {"user_id": self.userid})
+        response = self.client.post("/order/create/" + self.userid)
         orderObj = Order(self.userid, response.text)
         self.orders.append(orderObj)
 
@@ -89,7 +85,7 @@ class UserBehavior(TaskSet):
     def deleteRandomOrder(self):
         if len(self.orders) > 0:
             index = random.randint(0, len(self.orders)-1)
-            self.client.delete("/orders/remove/" + self.orders[index].orderid)
+            self.client.delete("/order/remove/" + self.orders[index].orderid)
             self.orders.pop(index)
 
     # Find the details for a random order for the current user if possible
@@ -97,7 +93,7 @@ class UserBehavior(TaskSet):
     def findRandomOrder(self):
         if len(self.orders) > 0:
             index = random.randint(0, len(self.orders)-1)
-            self.client.get("/orders/find/" + self.orders[index].orderid)
+            self.client.get("/order/find/" + self.orders[index].orderid)
 
     # Create a new item and add it to an unpaid order
     @task(10)
@@ -111,7 +107,7 @@ class UserBehavior(TaskSet):
             response = self.client.post("/stock/item/create")
             itemID = response.text
 
-            self.client.post("/orders/addItem", {"order_id": randomID, "item_id": itemID})
+            self.client.post("/order/addItem/" + randomID + "/" + itemID)
             randomOrder.addItem(itemID)
 
     # Remove a random item from an unpaid order
@@ -126,7 +122,7 @@ class UserBehavior(TaskSet):
                 randomItemIndex = random.randint(0, len(randomOrder.items)-1)
                 randomItemID = randomOrder.items[randomItemIndex]
 
-                self.client.delete("/orders/removeItem/" + randomOrder.orderid + "/" + randomItemID)
+                self.client.delete("/order/removeItem/" + randomOrder.orderid + "/" + randomItemID)
                 randomOrder.removeItem(randomItemIndex)
 
     # Checkout a random unpaid order
@@ -137,7 +133,7 @@ class UserBehavior(TaskSet):
         if len(unpaidOrders) > 0:
             randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
 
-            self.client.post("/orders/checkout", {"order_id": randomOrder.orderid})
+            self.client.post("/order/checkout/" + randomOrder.orderid)
 
             # !! SHOULD CHECK IF WE ACTUALLY GOT BACK SUCCESS OR FAILURE!
             randomOrder.setPaid(True)
@@ -166,7 +162,7 @@ class UserBehavior(TaskSet):
             if len(randomOrder.items) > 0:
                 randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
                 stockAmount = random.randint(1,100)
-                self.client.post("/stock/add", {"item_id": randomItem, "number": stockAmount})
+                self.client.post("/stock/add" + randomItem + "/" + str(stockAmount))
 
     """ Payment Service """
     # Pay should not be called directly, is tested by checkout from orderservice
@@ -178,7 +174,7 @@ class UserBehavior(TaskSet):
 
         if len(paidOrders) > 0:
             randomOrder = paidOrders[random.randint(0, len(paidOrders)-1)]
-            self.client.post("/payment/cancelPayment", {"user_id": self.userid, "order_id": randomOrder.orderid})
+            self.client.post("/payment/cancelPayment/" + self.userid + "/" + randomOrder.orderid})
             randomOrder.setPaid(False)
     
     # Check the status of a random order
