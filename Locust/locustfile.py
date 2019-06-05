@@ -39,6 +39,9 @@ class UserBehavior(TaskSet):
         # Make sure that at least one item exists
         response = self.client.post("/stock/item/create")
         self.orders[0].addItem(response.text)
+    
+    def on_stop(self):
+        print("Finished")
 
     # Helper function to find random order with given status
     def findOrdersWithStatus(self, paid):
@@ -162,7 +165,7 @@ class UserBehavior(TaskSet):
             if len(randomOrder.items) > 0:
                 randomItem = randomOrder.items[random.randint(0, len(randomOrder.items)-1)]
                 stockAmount = random.randint(1,100)
-                self.client.post("/stock/add" + randomItem + "/" + str(stockAmount))
+                self.client.post("/stock/add/" + randomItem + "/" + str(stockAmount))
 
     """ Payment Service """
     # Pay should not be called directly, is tested by checkout from orderservice
@@ -174,7 +177,7 @@ class UserBehavior(TaskSet):
 
         if len(paidOrders) > 0:
             randomOrder = paidOrders[random.randint(0, len(paidOrders)-1)]
-            self.client.post("/payment/cancelPayment/" + self.userid + "/" + randomOrder.orderid})
+            self.client.post("/payment/cancel/" + self.userid + "/" + randomOrder.orderid)
             randomOrder.setPaid(False)
     
     # Check the status of a random order
