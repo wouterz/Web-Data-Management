@@ -6,6 +6,7 @@ import service.order.RMI.PaymentClient;
 import service.order.RMI.StockClient;
 import service.order.models.Order;
 import service.order.storage.Dao;
+import service.order.storage.RedisRepository;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,7 +20,7 @@ public class OrderController {
 
     @Autowired
     private
-    Dao<Order> localRepository;
+    RedisRepository localRepository;
 
     @Autowired
     private
@@ -51,25 +52,25 @@ public class OrderController {
     @GetMapping("/find/orderId")
     // GET - retrieve info about orderId: pay status, items, userId
     public Order orderFind(@PathVariable long orderId) {
-        return localRepository.get(orderId);
+        return (Order)localRepository.get(orderId);
     }
 
     @PostMapping("/addItem/{orderId}/{itemId}")
     // POST - add item with itemId to orderId
     public Order orderAddItem(@PathVariable(value = "orderId") long orderId, @PathVariable(value = "itemId") long itemId) {
         // get order - orderId
-        Order o = localRepository.get(orderId);
+        Order o = (Order)localRepository.get(orderId);
 
-        return localRepository.update(orderId, o.addItem(itemId));
+        return (Order)localRepository.update(orderId, o.addItem(itemId));
     }
 
     @DeleteMapping("/removeItem/{orderId}/{itemId}")
     // DELETE/POST - remove itemId from orderId
     public Order orderRemoveItem(@PathVariable(value = "orderId") long orderId, @PathVariable(value = "itemId") long itemId) {
         // get order - orderId
-        Order o = localRepository.get(orderId);
+        Order o = (Order)localRepository.get(orderId);
         // remove item:itemId from order
-        return localRepository.update(orderId, o.removeItem(itemId));
+        return (Order)localRepository.update(orderId, o.removeItem(itemId));
     }
 
     // POST - make payment (call pay service), subtract stock(stock service)
@@ -77,7 +78,7 @@ public class OrderController {
     @PostMapping("/checkout/{orderId}")
     public boolean orderCheckout(@PathVariable(value = "orderId") long orderId) {
         // get order - orderId
-        Order o = localRepository.get(orderId);
+        Order o = (Order)localRepository.get(orderId);
 
         // checkout order
         long paymentId = paymentClient.create(o.getUserId(), orderId);

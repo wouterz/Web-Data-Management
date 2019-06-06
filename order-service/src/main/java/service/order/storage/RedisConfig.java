@@ -25,7 +25,7 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisConfig {
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
+		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("redis-order", 6382);
 		return new JedisConnectionFactory(redisStandaloneConfiguration);
 	}
 
