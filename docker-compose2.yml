@@ -20,6 +20,7 @@ services:
       - eureka
     environment:
       eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+
   user:
     build: ./user-service
     ports:
@@ -65,6 +66,30 @@ services:
       - /data
     ports:
      - "6380:6380"
+    networks:
+      - spring
+
+  payment:
+    build: ./payment-service
+    ports:
+      - "0:80"
+    networks:
+      - spring
+    depends_on:
+      - eureka
+    links:
+      - eureka
+      - redis-payment
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+
+  redis-payment:
+    image: "redis:alpine"
+    command: [ "redis-server", "--protected-mode", "no", "--appendonly", "yes", "--port", "6381"  ]
+    volumes:
+      - /data
+    ports:
+     - "6381:6381"
     networks:
       - spring
 

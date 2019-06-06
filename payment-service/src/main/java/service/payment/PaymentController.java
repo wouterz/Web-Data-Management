@@ -12,6 +12,7 @@ import service.payment.RMI.UserClient;
 import service.payment.models.Order;
 import service.payment.models.Payment;
 import service.payment.storage.Dao;
+import service.payment.storage.RedisRepository;
 
 @RestController
 public class PaymentController {
@@ -24,7 +25,7 @@ public class PaymentController {
 
 
     @Autowired
-    private Dao<Payment> localRepository;
+    private RedisRepository localRepository;
 
     @Autowired
     private UserClient userClient;
@@ -58,7 +59,7 @@ public class PaymentController {
 
 //        TODO - reverse of create
         //        TODO get by orderID
-        Payment payment = localRepository.get(order_id);
+        Payment payment = (Payment)localRepository.get(order_id);
         boolean creditSucces = userClient.addCredits(user_id, payment.getCredits());
 
 
@@ -70,7 +71,7 @@ public class PaymentController {
         LOGGER.info("Request: /payment/status/order " + order_id);
 
 //        TODO get by orderID
-        return localRepository.get(order_id).getPaymentStatus();
+        return ((Payment)localRepository.get(order_id)).getPaymentStatus();
     }
 
     @GetMapping("/payment")
