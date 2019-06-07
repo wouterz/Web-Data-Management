@@ -27,7 +27,7 @@ class UserBehavior(TaskSet):
 
         userResponse = self.client.post("/user/create")
         self.userid = userResponse.text
-        self.client.post("/user/" + self.userid + "/credit/add/" + str(random.randint(1,1000)))
+        self.client.post("/user/" + self.userid + "/credit/add/" + str(random.randint(1,10)))
 
         # Create a list of orders for this user
         self.orders = []
@@ -73,7 +73,7 @@ class UserBehavior(TaskSet):
     # Add some random amount of credit to the account
     @task(1)
     def addCredit(self):
-        self.client.post("/user/" + self.userid + "/credit/add/" + str(random.randint(1,100)))
+        self.client.post("/user/" + self.userid + "/credit/add/" + str(random.randint(1,10)))
 
     """ Order Service """
     # Create new order for this user
