@@ -1,26 +1,28 @@
 package service.payment.models;
 
+import java.util.UUID;
+
 public class Payment {
 
     public enum PaymentStatus {
         PAID, UNPAID
     }
 
-    private long id;
+    private String id;
     private PaymentStatus paymentStatus;
     private long userId;
     private long orderId;
     private long credits;
 
     public Payment(long id, PaymentStatus paymentStatus, long userId, long orderId, long credits) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.paymentStatus = paymentStatus;
         this.userId = userId;
         this.orderId = orderId;
         this.credits = credits;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 

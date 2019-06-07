@@ -7,8 +7,8 @@ public class RedisRepository implements Dao {
 
 
     @Override
-    public long create(long id) {
-        return 0;
+    public String create(long id) {
+        return "0";
     }
 
     @Override

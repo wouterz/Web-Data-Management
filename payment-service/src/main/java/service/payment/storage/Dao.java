@@ -2,7 +2,7 @@ package service.payment.storage;
 
 public interface Dao<T> {
 
-    long create(long id);
+    String create(long id);
 
     T get(long id);
 

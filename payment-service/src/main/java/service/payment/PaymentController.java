@@ -35,7 +35,7 @@ public class PaymentController {
 
 
     @PostMapping("/payment/pay/{user_id}/{order_id}")
-    public long create(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
+    public String create(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
 
 //        TODO
@@ -46,7 +46,7 @@ public class PaymentController {
         if (userClient.subtractCredits(user_id, totalCost)) {
             return localRepository.create(counter.getAndIncrement());
         } else {
-            return -1;
+            return "-1";
         }
 
 
