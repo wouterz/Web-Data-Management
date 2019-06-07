@@ -1,5 +1,12 @@
 package service.user.storage;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import static java.lang.Math.toIntExact;
+import service.user.models.User;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
