@@ -4,7 +4,7 @@ public interface Dao<T> {
 
     T create(T t);
 
-    T get(long id);
+    T get(String id);
 
     T update(long id, T t);
 

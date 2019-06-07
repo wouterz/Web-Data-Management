@@ -56,9 +56,42 @@ public class PostgresRepository implements Dao {
         return stock;
     }
 
+    /**
+     * Very basic way of retrieving a stock corresponding to id
+     * @param id Id of the StockItem
+     * @return StockItem if it was found, null otherwise.
+     */
     @Override
-    public Object get(long id) {
-        return null;
+    public Object get(String id) {
+        Connection c = connectoRDS();
+        Statement statement;
+        StockItem foundStock = null;
+
+        try {
+            statement = c.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM STOCKITEM;");
+            while (rs.next()) {
+                String currentId = rs.getString("id");
+                String name = rs.getString("name");
+                int stock = rs.getInt("stock");
+
+                if (currentId.equals(id)) {
+                    foundStock = new StockItem(currentId, name, stock);
+                }
+            }
+            rs.close();
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        if (foundStock != null) {
+            System.out.println("Stock found successfully");
+            return foundStock;
+        } else {
+            System.out.println("Stock not found");
+            return null;
+        }
     }
 
     @Override

@@ -24,7 +24,7 @@ public class RedisRepository implements Dao {
     }
 
     @Override
-    public Object get(long id) {
+    public StockItem get(String id) {
         StockItem stockItem = hashOps.get(KEY, id);
         return stockItem;
     }
