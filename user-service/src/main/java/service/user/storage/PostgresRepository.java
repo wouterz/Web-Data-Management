@@ -33,9 +33,29 @@ public class PostgresRepository implements Dao {
         return c;
     }
 
+    /**
+     * Create a database entry for the user given
+     * @param o User object to be written to the database
+     * @return The user object if it is successfully written to the database, otherwise null
+     */
     @Override
-    public String create(long id) {
-        return "0";
+    public User create(Object o) {
+        Connection c = connectoRDS();
+        Statement statement;
+        User user = (User) o;
+        try {
+            statement = c.createStatement();
+            String sql = "INSERT INTO USERS (ID,CREDIT) "
+                    + "VALUES (" + userSQLFormat(user) + ");";
+            statement.executeUpdate(sql);
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.out.println("User already exists, no user entry created");
+            return null;
+        }
+        System.out.println("User " + user.toString() + " created successfully");
+        return user;
     }
 
     @Override
@@ -51,5 +71,18 @@ public class PostgresRepository implements Dao {
     @Override
     public boolean delete(long id) {
         return false;
+    }
+
+    /**
+     * Translates a user object into a simple string to inject in an SQL statement
+     *
+     * @param user The user object to translate
+     * @return SQL-valid string
+     */
+    private static String userSQLFormat(User user) {
+        String idString = user.getId();
+        String creditString = Long.toString(user.getCredits());
+
+        return idString + ", " + creditString;
     }
 }
