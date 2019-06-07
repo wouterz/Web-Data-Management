@@ -1,16 +1,17 @@
 package service.stock.models;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class StockItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-    private final long id;
+    private final String id;
     private final String name;
     private int stock;
 
     public StockItem(long id, String name){
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.stock = 0;
     }
@@ -19,7 +20,7 @@ public class StockItem implements Serializable {
         this.stock += amount;
     }
 
-    public long getId(){
+    public String getId(){
         return this.id;
     }
 

@@ -17,11 +17,11 @@ public class LocalRepository implements Dao {
     private List<Order> Orders = new ArrayList<>();
 
     @Override
-    public long create(long userId) {
+    public String create(long userId) {
     	long orderId = counter.getAndIncrement();
         Order order = new Order(userId, orderId);
         Orders.add(order);
-        return orderId;
+        return "no";
     }
 
     @Override

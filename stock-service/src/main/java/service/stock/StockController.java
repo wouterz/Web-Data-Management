@@ -26,7 +26,7 @@ public class StockController {
 
     // Create a new stock item by supplying the name
     @RequestMapping(value= "/stock/item/create", method=POST)
-    public long createStockItem() {
+    public String createStockItem() {
         LOGGER.info("REQUEST: /stock/item/create");
 
         return localRepository.create(counter.getAndIncrement());
