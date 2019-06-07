@@ -49,7 +49,7 @@ public class OrderController {
     }
 
 
-    @GetMapping("/find/orderId")
+    @GetMapping("/find/{orderId}")
     // GET - retrieve info about orderId: pay status, items, userId
     public Order orderFind(@PathVariable long orderId) {
         return (Order)localRepository.get(orderId);
