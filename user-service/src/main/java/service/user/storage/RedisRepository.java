@@ -29,10 +29,10 @@ public class RedisRepository implements Dao {
     }
 
     @Override
-    public Object update(Object o) {
-        User user = (User) o;
+    public String update(String id, long credit) {
+        User user = new User(id, credit);
         hashOps.put(KEY, ((User) user).getId(), (User) user);
-        return user;
+        return id;
     }
 
     @Override

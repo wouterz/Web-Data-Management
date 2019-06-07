@@ -30,7 +30,8 @@ public class RedisRepository implements Dao {
     }
 
     @Override
-    public Object update(Object stockItem) {
+    public StockItem update(Object o) {
+        StockItem stockItem = (StockItem) o;
         hashOps.put(KEY, ((StockItem) stockItem).getId(), (StockItem) stockItem);
         return stockItem;
     }

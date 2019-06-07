@@ -6,7 +6,7 @@ public interface Dao<T> {
 
     T get(String id);
 
-    T update(T t);
+    String update(String id, long credit);
 
     boolean delete(T t);
 }

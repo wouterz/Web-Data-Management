@@ -2,6 +2,7 @@ package service.stock.storage;
 
 import org.springframework.stereotype.Repository;
 import service.stock.models.StockItem;
+
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.Connection;
@@ -33,6 +34,7 @@ public class PostgresRepository implements Dao {
 
     /**
      * Creates new StockItem entry in the database
+     *
      * @param o StockItem to add to the database
      * @return The StockItem if successful, null otherwise.
      */
@@ -58,6 +60,7 @@ public class PostgresRepository implements Dao {
 
     /**
      * Very basic way of retrieving a stock corresponding to id
+     *
      * @param id Id of the StockItem
      * @return StockItem if it was found, null otherwise.
      */
@@ -96,17 +99,16 @@ public class PostgresRepository implements Dao {
 
     /**
      * Updates the table entry corresponding to stock
-     * @param o StockItem to be updated in the table
-     * @return The updated stock if successful, null otherwise
-     */
+     **/
+
     @Override
-    public Object update(Object o) {
+    public StockItem update(Object o) {
+        StockItem stockItem = (StockItem) o;
         Connection c = connectoRDS();
-        StockItem stock = (StockItem) o;
         Statement statement;
         try {
             statement = c.createStatement();
-            String sql = "UPDATE STOCKITEM set STOCK = " + Long.toString(stock.getStock()) + " where ID=" + stock.getId() + ";";
+            String sql = "UPDATE STOCKITEM set STOCK = " + Integer.toString(stockItem.getStock()) + " where ID=" + stockItem.getId() + ";";
             statement.executeUpdate(sql);
 
             statement.close();
@@ -116,11 +118,12 @@ public class PostgresRepository implements Dao {
             return null;
         }
         System.out.println("Update done successfully");
-        return stock;
+        return stockItem;
     }
 
     /**
      * Deletes the stock corresponding to id from the database table
+     *
      * @param o StockItem to be deleted
      * @return True if the deletion was done successful, false otherwise
      */

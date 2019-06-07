@@ -53,7 +53,7 @@ public class UserController {
     public boolean addCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount) {
         User user = (User)localRepository.get(user_id);
         user.setCredits(user.getCredits() + amount);
-        localRepository.update(user);
+        localRepository.update(user_id, user.getCredits());
 
         return true;
     }
@@ -67,7 +67,7 @@ public class UserController {
         }
 
         user.setCredits(user.getCredits() - amount);
-        localRepository.update(user);
+        localRepository.update(user_id, user.getCredits());
 
         return true;
     }

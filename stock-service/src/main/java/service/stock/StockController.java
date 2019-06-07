@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import service.stock.models.StockItem;
 import service.stock.storage.RedisRepository;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -18,53 +16,50 @@ public class StockController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StockController.class);
 
 
-    // Temporary way to generate ID
-    private final AtomicLong counter = new AtomicLong();
-
     @Autowired
     private RedisRepository localRepository;
 
     // Create a new stock item by supplying the name
-    @RequestMapping(value= "/stock/item/create", method=POST)
-    public String createStockItem() {
+    @RequestMapping(value = "/stock/item/create", method = POST)
+    public StockItem createStockItem(String name) {
         LOGGER.info("REQUEST: /stock/item/create");
 
-        return localRepository.create(counter.getAndIncrement());
+        StockItem stock = new StockItem(name);
+
+        return localRepository.create(stock);
     }
 
     // Get info for a stock by supplying the id
-    @RequestMapping(value= "/stock/availability/{id}", method=GET)
-    public int getStockItem(@PathVariable(value="id") long id) {
+    @RequestMapping(value = "/stock/availability/{id}", method = GET)
+    public int getStockItem(@PathVariable(value = "id") String id) {
         // Should get Stock item from database
 
-        return ((StockItem)localRepository.get(id)).getStock();
+        return ((StockItem) localRepository.get(id)).getStock();
     }
 
     // Add to the stock of an item by supplying the id
-    @RequestMapping(value= "/stock/add/{id}/{amount}", method=POST)
-    public StockItem addStock(@PathVariable(value="id") long id,
-                              @PathVariable(value="amount") int amount) {
+    @RequestMapping(value = "/stock/add/{id}/{amount}", method = POST)
+    public StockItem addStock(@PathVariable(value = "id") String id,
+                              @PathVariable(value = "amount") int amount) {
         return updateStock(id, amount);
     }
 
     // Subtract from the stock of an item by supplying the id
-    @RequestMapping(value= "/stock/subtract/{id}/{amount}", method=POST)
-    public StockItem subtractStock(@PathVariable(value="id") long id,
-                              @PathVariable(value="amount") int amount) {
+    @RequestMapping(value = "/stock/subtract/{id}/{amount}", method = POST)
+    public StockItem subtractStock(@PathVariable(value = "id") String id,
+                                   @PathVariable(value = "amount") int amount) {
         return updateStock(id, -amount);
     }
 
     // Update stock method used by the add and subtract endpoint
-    private StockItem updateStock(long id, int amount) {
-        // First it should get the stock item from the database here
-        // We dont have a database connection yet, so we will make a placeholder stock item
-        StockItem item = (StockItem)localRepository.get(id);
+    private StockItem updateStock(String id, int amount) {
+        StockItem item = (StockItem) localRepository.get(id);
 
         // Change stock
         item.addToStock(amount);
 
         // Save the changes to the database
-        return (StockItem)localRepository.update(id, item);
+        return (StockItem) localRepository.update(item);
     }
 
     @GetMapping("/stock")

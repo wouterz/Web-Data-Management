@@ -98,19 +98,18 @@ public class PostgresRepository implements Dao {
     /**
      * Updates the table entry corresponding to user
      *
-     * @param o User to be updated in the table
-     * @return The updated user if successful, null otherwise
+     * @param id Id of the user to be updated in the table
+     * @param credit Credit to be updated in the table
+     * @return The id of updated user if successful, null otherwise
      */
     @Override
-    public Object update(Object o) {
-        User user = (User) o;
-
+    public String update(String id, long credit) {
         Connection c = connectoRDS();
         Statement statement;
 
         try {
             statement = c.createStatement();
-            String sql = "UPDATE USERS set CREDIT = " + Long.toString(user.getCredits()) + " where ID=" + user.getId() + ";";
+            String sql = "UPDATE USERS set CREDIT = " + Long.toString(credit) + " where ID=" + id + ";";
             statement.executeUpdate(sql);
 
             statement.close();
@@ -120,7 +119,7 @@ public class PostgresRepository implements Dao {
             return null;
         }
         System.out.println("Update done successfully");
-        return user;
+        return id;
     }
 
     /**
