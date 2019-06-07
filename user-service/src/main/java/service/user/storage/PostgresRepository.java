@@ -20,7 +20,7 @@ public class PostgresRepository implements Dao {
         Connection c = null;
         try {
             c = DriverManager
-                    .getConnection("jdbc:postgresql://webdata.cieofnaztu9b.us-east-1.rds.amazonaws.com:5432/webdata",
+                    .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
                             "webdata", "reverse123");
         } catch (Exception e) {
             e.printStackTrace();
