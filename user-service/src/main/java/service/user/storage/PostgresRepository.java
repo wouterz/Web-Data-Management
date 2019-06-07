@@ -50,7 +50,7 @@ public class PostgresRepository implements Dao {
             statement.close();
             c.close();
         } catch (Exception e) {
-            System.out.println("User already exists, no user entry created");
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return null;
         }
         System.out.println("User " + user.toString() + " created successfully");

@@ -2,7 +2,7 @@ package service.stock.storage;
 
 public interface Dao<T> {
 
-    String create(long id);
+    T create(T t);
 
     T get(long id);
 

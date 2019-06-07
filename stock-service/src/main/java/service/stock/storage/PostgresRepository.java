@@ -1,7 +1,9 @@
 package service.stock.storage;
 
 import org.springframework.stereotype.Repository;
-
+import service.stock.models.StockItem;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -28,10 +30,30 @@ public class PostgresRepository implements Dao {
 
         return c;
     }
-    
+
+    /**
+     * Creates new StockItem entry in the database
+     * @param o StockItem to add to the database
+     * @return The StockItem if successful, null otherwise.
+     */
     @Override
-    public String create(long id) {
-        return "0";
+    public StockItem create(Object o) {
+        Connection c = connectoRDS();
+        Statement statement;
+        StockItem stock = (StockItem) o;
+        try {
+            statement = c.createStatement();
+            String sql = "INSERT INTO STOCKITEM (ID,NAME,STOCK) "
+                    + "VALUES (" + stockItemSQLFormat(stock) + ");";
+            statement.executeUpdate(sql);
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }
+        System.out.println("StockItem " + stock.toString() + " created successfully");
+        return stock;
     }
 
     @Override
@@ -47,5 +69,19 @@ public class PostgresRepository implements Dao {
     @Override
     public boolean delete(long id) {
         return false;
+    }
+
+    /**
+     * Translates a StockItem object into a simple string to inject in an SQL statement
+     *
+     * @param stock The stock object to translate
+     * @return SQL-valid string
+     */
+    private static String stockItemSQLFormat(StockItem stock) {
+        String idString = stock.getId();
+        String name = stock.getName();
+        String stockString = Integer.toString(stock.getStock());
+
+        return "'" + idString + "'" + ", '" + name + "', " + stockString;
     }
 }
