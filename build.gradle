@@ -35,7 +35,7 @@ allprojects {
         implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
         implementation 'org.springframework.cloud:spring-cloud-stream'
         implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
-        runtimeOnly 'org.postgresql:postgresql'
+        implementation('org.postgresql:postgresql:9.4-1206-jdbc42')
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.springframework.cloud:spring-cloud-stream-test-support'
         compile 'redis.clients:jedis:2.9.0'
