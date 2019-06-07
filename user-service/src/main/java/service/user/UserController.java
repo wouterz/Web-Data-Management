@@ -17,18 +17,17 @@ public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    private final AtomicLong counter = new AtomicLong();
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private RedisRepository localRepository;
 
     @PostMapping("/user/create")
-    public String create() {
+    public User create() {
         LOGGER.info("Request POST: /user/create");
-        User user = new User(counter.getAndIncrement(), 0);
+        User user = new User();
 
-        return localRepository.create(counter.get());
+        return localRepository.create(user);
     }
 
     @DeleteMapping("/user/{user_id}")
@@ -39,14 +38,14 @@ public class UserController {
     }
 
     @GetMapping("/user/{user_id}")
-    public User find(@PathVariable(value = "user_id") long user_id) {
+    public User find(@PathVariable(value = "user_id") String user_id) {
         LOGGER.info("Request GET: user/" + user_id);
 
         return (User)localRepository.get(user_id);
     }
 
     @GetMapping("/user/{user_id}/credit")
-    public long getCredits(@PathVariable(value = "user_id") long user_id) {
+    public long getCredits(@PathVariable(value = "user_id") String user_id) {
         LOGGER.info("Request: user/" + user_id +"/credit");
 
         return ((User)(localRepository.get(user_id))).getCredits();
@@ -55,16 +54,16 @@ public class UserController {
     
 
     @PostMapping("/user/{user_id}/credit/add/{amount}")
-    public boolean addCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount) {
+    public boolean addCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount) {
         User user = (User)localRepository.get(user_id);
         user.setCredits(user.getCredits() + amount);
-        localRepository.update(user_id, user);
+        localRepository.update(user);
 
         return true;
     }
 
     @PostMapping("/user/{user_id}/credit/subtract/{amount}")
-    public boolean subtractCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount) {
+    public boolean subtractCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount) {
         User user = (User)localRepository.get(user_id);
 
         if (user.getCredits() > amount) {
@@ -72,7 +71,7 @@ public class UserController {
         }
 
         user.setCredits(user.getCredits() - amount);
-        localRepository.update(user_id, user);
+        localRepository.update(user);
 
         return true;
     }
