@@ -54,7 +54,7 @@ public class PaymentController {
 
 
     @PostMapping("/payment/cancel/{user_id}/{order_id}")
-    public long cancel(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
+    public String cancel(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/cancel/ user " + user_id + "/ order " + order_id);
 
 //        TODO - reverse of create
