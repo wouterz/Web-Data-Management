@@ -22,8 +22,21 @@ public class User implements Serializable {
                 '}';
     }
 
-    public User(long id, long credits) {
+    /**
+     * Constructor for new users
+     */
+    public User() {
         this.id = UUID.randomUUID().toString();
+        this.credits = 0;
+    }
+
+    /**
+     * Constructor for users retrieved from the dataabse
+     * @param id Id of the user
+     * @param credits Credit of the user
+     */
+    public User(String id, long credits) {
+        this.id = id;
         this.credits = credits;
     }
 

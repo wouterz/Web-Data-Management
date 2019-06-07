@@ -58,9 +58,42 @@ public class PostgresRepository implements Dao {
         return user;
     }
 
+    /**
+     * Very basic way of retrieving a user corresponding to id
+     *
+     * @param id Id of the user to be retrieved
+     * @return The user if found in the table, null otherwise
+     */
     @Override
-    public Object get(long id) {
-        return null;
+    public User get(String id) {
+        Connection c = connectoRDS();
+        Statement statement;
+        User foundUser = null;
+
+        try {
+            statement = c.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM USERS;");
+            while (rs.next()) {
+                String currentId = rs.getString("id");
+                long credit = rs.getLong("credit");
+
+                if (currentId.equals(id)) {
+                    foundUser = new User(currentId, credit);
+                }
+            }
+            rs.close();
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        if (foundUser != null) {
+            System.out.println("User found successfully");
+            return foundUser;
+        } else {
+            System.out.println("User not found");
+            return null;
+        }
     }
 
     @Override
