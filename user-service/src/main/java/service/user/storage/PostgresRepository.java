@@ -96,9 +96,32 @@ public class PostgresRepository implements Dao {
         }
     }
 
+    /**
+     * Updates the table entry corresponding to user
+     *
+     * @param o User to be updated in the table
+     * @return The updated user if successful, null otherwise
+     */
     @Override
-    public Object update(long id, Object o) {
-        return null;
+    public Object update(Object o) {
+        User user = (User) o;
+
+        Connection c = connectoRDS();
+        Statement statement;
+
+        try {
+            statement = c.createStatement();
+            String sql = "UPDATE USERS set CREDIT = " + Long.toString(user.getCredits()) + " where ID=" + user.getId() + ";";
+            statement.executeUpdate(sql);
+
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }
+        System.out.println("Update done successfully");
+        return user;
     }
 
     @Override

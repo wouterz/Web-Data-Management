@@ -29,7 +29,7 @@ public class RedisRepository implements Dao {
 	}
 
 	@Override
-	public Object update(long id, Object user) {
+	public Object update(Object user) {
 		hashOps.put(KEY, ((User)user).getId(), (User) user);
 		return user;
 	}
