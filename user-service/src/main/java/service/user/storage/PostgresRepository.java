@@ -12,6 +12,26 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PostgresRepository implements Dao {
 
+    /**
+     * Create a connection to the AWS Postgres database
+     *
+     * @return Connection to the database
+     */
+    private static Connection connectoRDS() {
+        Connection c = null;
+        try {
+            c = DriverManager
+                    .getConnection("jdbc:postgresql://webdata.cieofnaztu9b.us-east-1.rds.amazonaws.com:5432/webdata",
+                            "webdata", "reverse123");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Connected to database successfully");
+
+        return c;
+    }
 
     @Override
     public String create(long id) {
