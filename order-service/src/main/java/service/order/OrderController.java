@@ -34,7 +34,7 @@ public class OrderController {
     // Pathvariable => straight up
     // POST - create order for userId, return orderId
     @PostMapping("/create/{userId}")
-    public long orderCreate(@PathVariable(value = "userId") long userId) {
+    public String orderCreate(@PathVariable(value = "userId") long userId) {
         return localRepository.create(userId);
     }
 

@@ -2,7 +2,7 @@ package service.order.storage;
 
 public interface Dao<T> {
 
-    long create(long id);
+    String create(String id);
 
     T get(long id);
 

@@ -12,10 +12,11 @@ public class LocalRepository implements Dao {
     private List<User> Users = new ArrayList<>();
 
     @Override
-    public long create(long id) {
+    public String create(long id) {
         User user = new User(id, 0);
         Users.add(user);
-        return id;
+        //return id;
+        return "no";
     }
 
     @Override

@@ -3,45 +3,45 @@ package service.order.models;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 
     // Identifier for this order
-    private final long orderId;
+    private final String orderId;
     // User that owns this order
-    private final long userId;
+    private final String userId;
     // list of item ids
-    private List<Long> items;
+    private List<String> items;
 
     // need this?
     private boolean isPayed;
 
 
-    public Order(long userId, long orderId) {
+    public Order(String userId, long orderId) {
         this.userId = userId;
-        this.orderId = orderId;
-
+        this.orderId = UUID.randomUUID().toString();
 
         this.items = new ArrayList<>();
         this.isPayed = false;
     }
 
-    public long getorderId() {
+    public String getorderId() {
         return orderId;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public List<Long> getItems() {
+    public List<String> getItems() {
         return items;
     }
     public boolean getPaymentStatus(){
         return isPayed;
     }
 
-    public Order addItem(long itemId) {
+    public Order addItem(String itemId) {
         this.items.add(itemId);
 
         return this;
