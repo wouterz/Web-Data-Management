@@ -119,9 +119,28 @@ public class PostgresRepository implements Dao {
         return stock;
     }
 
+    /**
+     * Deletes the stock corresponding to id from the database table
+     * @param o StockItem to be deleted
+     * @return True if the deletion was done successful, false otherwise
+     */
     @Override
-    public boolean delete(long id) {
-        return false;
+    public boolean delete(Object o) {
+        Connection c = connectoRDS();
+        StockItem stock = (StockItem) o;
+        Statement statement;
+        try {
+            statement = c.createStatement();
+            String sql = "DELETE from STOCKITEM where ID = " + stock.getId() + ";";
+            statement.executeUpdate(sql);
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return false;
+        }
+        System.out.println("Deletion done successfully");
+        return true;
     }
 
     /**

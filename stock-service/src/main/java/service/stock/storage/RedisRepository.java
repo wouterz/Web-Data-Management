@@ -36,8 +36,9 @@ public class RedisRepository implements Dao {
     }
 
     @Override
-    public boolean delete(long id) {
-        hashOps.delete(KEY, id);
-        return hashOps.get(KEY, id) == null;
+    public boolean delete(Object o) {
+        StockItem stock = (StockItem) o;
+        hashOps.delete(KEY, stock.getId());
+        return hashOps.get(KEY, stock.getId()) == null;
     }
 }
