@@ -63,6 +63,11 @@ public class StockController {
         // We dont have a database connection yet, so we will make a placeholder stock item
         StockItem item = localRepository.get(id);
 
+        // Check if valid amount
+        if ((item.getStock() + amount) < 0) {
+            return null;
+        }
+
         // Change stock
         item.addToStock(amount);
 

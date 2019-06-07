@@ -37,18 +37,24 @@ public class PaymentController {
     public long create(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
         LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
 
-//        TODO
-//        totalCost = orderClient.
-        int totalCost = 20;
+        boolean checkoutSuccess = orderClient.orderCheckout(order_id);
 
-//        subtract credits
-        if (userClient.subtractCredits(user_id, totalCost)) {
-            return localRepository.create(counter.getAndIncrement());
-        } else {
+        if (!checkoutSuccess) {
             return -1;
         }
 
+        int totalCost = orderClient.getPrice(order_id);
 
+//        subtract credits
+        boolean subtCredSuccess = userClient.subtractCredits(user_id, totalCost);
+        if (!subtCredSuccess) {
+            boolean cancelSuccess = orderClient.cancelOrderCheckout(order_id);
+            if (!cancelSuccess) {
+                throw new RuntimeException("oops failed to cancel order, inconsistentcy");
+            }
+        }
+        
+        return localRepository.create(counter.getAndIncrement());
     }
 
 
