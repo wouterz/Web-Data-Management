@@ -22,9 +22,9 @@ public class User implements Serializable {
                 '}';
     }
 
-    public User() {
+    public User(long id, long credits) {
         this.id = UUID.randomUUID().toString();
-        this.credits = 0;
+        this.credits = credits;
     }
 
     public long getCredits() {
