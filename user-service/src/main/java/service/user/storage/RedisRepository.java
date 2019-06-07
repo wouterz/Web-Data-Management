@@ -16,10 +16,10 @@ public class RedisRepository implements Dao {
 	private HashOperations<String, String, User> hashOps;
 
 	@Override
-	public String create(long id) {
-		User user = new User(id, 0);
+	public User create(Object o) {
+		User user = (User) o;
 		hashOps.putIfAbsent(KEY, user.getId(), user);
-		return user.getId();
+		return user;
 	}
 
 	@Override
