@@ -14,10 +14,11 @@ public class LocalRepository implements Dao {
 	private List<StockItem> StockItems = new ArrayList<>();
 
 	@Override
-	public long create(long id) {
+	public String create(long id) {
 		StockItem stockItem = new StockItem(id, "emptyName");
 		StockItems.add(stockItem);
-		return id;
+		//return id;
+		return "no";
 	}
 
 	@Override

@@ -1,15 +1,16 @@
 package service.user.models;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 
-    private final Long id;
+    private final String id;
     private long credits;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -22,7 +23,7 @@ public class User implements Serializable {
     }
 
     public User(long id, long credits) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.credits = credits;
     }
 

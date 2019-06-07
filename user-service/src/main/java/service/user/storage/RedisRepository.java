@@ -13,13 +13,13 @@ public class RedisRepository implements Dao {
 	private static final String KEY = "users";
 
 	@Resource(name = "redisTemplate")
-	private HashOperations<String, Long, User> hashOps;
+	private HashOperations<String, String, User> hashOps;
 
 	@Override
-	public long create(long id) {
+	public String create(long id) {
 		User user = new User(id, 0);
-		hashOps.putIfAbsent(KEY, id, user);
-		return id;
+		hashOps.putIfAbsent(KEY, user.getId(), user);
+		return user.getId();
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class RedisRepository implements Dao {
 
 	@Override
 	public Object update(long id, Object user) {
-		hashOps.put(KEY, id, (User) user);
+		hashOps.put(KEY, ((User)user).getId(), (User) user);
 		return user;
 	}
 

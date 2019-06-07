@@ -24,7 +24,7 @@ public class UserController {
     private RedisRepository localRepository;
 
     @PostMapping("/user/create")
-    public long create() {
+    public String create() {
         LOGGER.info("Request POST: /user/create");
         User user = new User(counter.getAndIncrement(), 0);
 
