@@ -3,14 +3,14 @@ services:
   eureka:
     build: ./eureka-server
     ports:
-      - "80:8761"
+      - "8080:8761"
       - "8761:8761"
     networks:
       - spring
   zuul:
     build: ./zuul-server
     ports:
-      - "8080:8762"
+      - "80:8762"
       - "8762:8762"
     networks:
       - spring
