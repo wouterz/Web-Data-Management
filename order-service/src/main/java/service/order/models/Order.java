@@ -1,6 +1,7 @@
 package service.order.models;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +21,7 @@ public class Order implements Serializable {
 
     /**
      * Constructor for creating a new order
+     *
      * @param userId
      */
     public Order(String userId) {
@@ -47,10 +49,12 @@ public class Order implements Serializable {
     public String getUserId() {
         return userId;
     }
+
     public List<String> getItems() {
         return items;
     }
-    public boolean getPaymentStatus(){
+
+    public boolean getPaymentStatus() {
         return isPayed;
     }
 
@@ -60,7 +64,7 @@ public class Order implements Serializable {
         return this;
     }
 
-    public Order removeItem(String itemId) {
+    public Order removeItem(long itemId) {
         this.items.remove(itemId);
 
         return this;
