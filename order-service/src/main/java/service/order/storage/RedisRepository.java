@@ -11,18 +11,14 @@ import service.order.models.Order;
 
 @Repository
 public class RedisRepository implements Dao {
-
-	private final AtomicLong counter = new AtomicLong();
-
 	private static final String KEY = "orders";
 
 	@Resource(name = "redisTemplate")
 	private HashOperations<String, String, Order> hashOps;
 
 	@Override
-	public String create(String userId) {
-		long orderId = counter.getAndIncrement();
-		Order order = new Order(userId, orderId);
+	public String create(Object o) {
+		Order order = (Order) o;
 		hashOps.putIfAbsent(KEY, order.getorderId(), order);
 		return order.getorderId();
 	}

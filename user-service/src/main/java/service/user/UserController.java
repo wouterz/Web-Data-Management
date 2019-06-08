@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.user.models.User;
+import service.user.storage.PostgresRepository;
 import service.user.storage.RedisRepository;
 
 @RestController
@@ -16,7 +17,7 @@ public class UserController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    private RedisRepository localRepository;
+    private PostgresRepository localRepository;
 
     @PostMapping("/user/create")
     public User create() {

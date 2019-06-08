@@ -19,7 +19,7 @@ public class Order implements Serializable {
     private boolean isPayed;
 
 
-    public Order(String userId, long orderId) {
+    public Order(String userId) {
         this.userId = userId;
         this.orderId = UUID.randomUUID().toString();
 
