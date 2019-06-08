@@ -127,6 +127,41 @@ public class PostgresRepository implements Dao {
         return true;
     }
 
+    @SuppressWarnings("Duplicates")
+    public Payment getPaymentByOrderAndUserId(String userId, String orderId) {
+        Connection c = connectoRDS();
+        Statement statement;
+        Payment foundPayment = null;
+
+        try {
+            statement = c.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM PAYMENT WHERE USERID='" + userId + "' AND ORDERID='" + orderId + "';");
+            // this resultSet will always have only one row, so this loop is short
+            while (rs.next()) {
+                String currentPaymentId = rs.getString("id");
+                Payment.PaymentStatus paymentStatus = Payment.PaymentStatus.valueOf(rs.getString("paymentstatus"));
+                String currentUserId = rs.getString("userid");
+                String currentOrderId = rs.getString("orderid");
+                long currentCredits = rs.getLong("credits");
+
+                foundPayment = new Payment(currentPaymentId, paymentStatus, currentUserId, currentOrderId, currentCredits);
+            }
+            rs.close();
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        if (foundPayment != null) {
+            System.out.println("Payment found successfully");
+            return foundPayment;
+        } else {
+            System.out.println("Payment not found");
+            return null;
+        }
+    }
+
+
     /**
      * Translates a order object into a simple string to inject in an SQL statement
      *

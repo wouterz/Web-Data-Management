@@ -12,6 +12,7 @@ import service.payment.RMI.UserClient;
 import service.payment.models.Order;
 import service.payment.models.Payment;
 import service.payment.storage.Dao;
+import service.payment.storage.PostgresRepository;
 import service.payment.storage.RedisRepository;
 
 @RestController
@@ -25,7 +26,7 @@ public class PaymentController {
 
 
     @Autowired
-    private RedisRepository localRepository;
+    private PostgresRepository localRepository;
 
     @Autowired
     private UserClient userClient;
@@ -35,7 +36,7 @@ public class PaymentController {
 
 
     @PostMapping("/payment/pay/{user_id}/{order_id}")
-    public String create(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
+    public String create(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "order_id") String order_id) {
         LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
 
 //        TODO
@@ -44,33 +45,35 @@ public class PaymentController {
 
 //        subtract credits
         if (userClient.subtractCredits(user_id, totalCost)) {
-            return localRepository.create(counter.getAndIncrement());
+            Payment payment = new Payment(Payment.PaymentStatus.PAID, user_id, order_id, totalCost);
+            localRepository.create(payment);
+            return "1";
         } else {
             return "-1";
         }
-
-
     }
 
 
     @PostMapping("/payment/cancel/{user_id}/{order_id}")
-    public String cancel(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "order_id") long order_id) {
+    public String cancel(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "order_id") String order_id) {
         LOGGER.info("Request: /payment/cancel/ user " + user_id + "/ order " + order_id);
 
 //        TODO - reverse of create
         //        TODO get by orderID
-        Payment payment = (Payment)localRepository.get(order_id);
-        boolean creditSucces = userClient.addCredits(user_id, payment.getCredits());
-
-
-        return localRepository.create(counter.get());
+        Payment payment = localRepository.getPaymentByOrderAndUserId(user_id, order_id);
+        if(userClient.addCredits(user_id, payment.getCredits())) {
+            localRepository.delete(payment.getId());
+            return "1";
+        } else {
+            return "-1";
+        }
     }
 
     @GetMapping("/payment/status/{order_id}")
-    public Payment.PaymentStatus status(@PathVariable(value = "order_id") long order_id) {
+    public Payment.PaymentStatus status(@PathVariable(value = "order_id") String order_id) {
         LOGGER.info("Request: /payment/status/order " + order_id);
 
-//        TODO get by orderID
+//        TODO get by orderID --> OrderId is not enough to find a payment right?
         return ((Payment)localRepository.get(order_id)).getPaymentStatus();
     }
 
