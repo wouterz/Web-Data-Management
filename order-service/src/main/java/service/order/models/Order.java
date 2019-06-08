@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Order implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     // Identifier for this order
     private final String orderId;
@@ -14,11 +14,14 @@ public class Order implements Serializable {
     private final String userId;
     // list of item ids
     private List<String> items;
-
     // need this?
     private boolean isPayed;
 
 
+    /**
+     * Constructor for creating a new order
+     * @param userId
+     */
     public Order(String userId) {
         this.userId = userId;
         this.orderId = UUID.randomUUID().toString();
@@ -27,7 +30,17 @@ public class Order implements Serializable {
         this.isPayed = false;
     }
 
-    public String getorderId() {
+    /**
+     * Constructor for creating an existing order from the database
+     */
+    public Order(String orderId, String userId, ArrayList<String> items, boolean isPayed) {
+        this.userId = userId;
+        this.orderId = orderId;
+        this.items = items;
+        this.isPayed = isPayed;
+    }
+
+    public String getOrderId() {
         return orderId;
     }
 

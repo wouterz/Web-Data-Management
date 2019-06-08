@@ -11,34 +11,36 @@ import service.order.models.Order;
 
 @Repository
 public class RedisRepository implements Dao {
-	private static final String KEY = "orders";
+    private static final String KEY = "orders";
 
-	@Resource(name = "redisTemplate")
-	private HashOperations<String, String, Order> hashOps;
+    @Resource(name = "redisTemplate")
+    private HashOperations<String, String, Order> hashOps;
 
-	@Override
-	public String create(Object o) {
-		Order order = (Order) o;
-		hashOps.putIfAbsent(KEY, order.getorderId(), order);
-		return order.getorderId();
-	}
+    @Override
+    public String create(Object o) {
+        Order order = (Order) o;
+        hashOps.putIfAbsent(KEY, order.getOrderId(), order);
+        return order.getOrderId();
+    }
 
-	@Override
-	public Object get(long id) {
-		Order order = hashOps.get(KEY, id);
-		return order;
-	}
+    @Override
+    public Order get(String id) {
+        Order order = hashOps.get(KEY, id);
+        return order;
+    }
 
-	@Override
-	public Object update(long id, Object order) {
-		hashOps.put(KEY, ((Order) order).getorderId(), (Order) order);
-		return order;
-	}
+    @Override
+    public Order update(Object o) {
+        Order order = (Order) o;
+        hashOps.put(KEY, (order).getOrderId(), order);
+        return order;
+    }
 
-	@Override
-	public boolean delete(long id) {
-		hashOps.delete(KEY, id);
-		return hashOps.get(KEY, id) == null;
-	}
+    @Override
+    public boolean delete(Object o) {
+        Order order = (Order) o;
+        hashOps.delete(KEY, order.getOrderId());
+        return hashOps.get(KEY, order.getOrderId()) == null;
+    }
 
 }

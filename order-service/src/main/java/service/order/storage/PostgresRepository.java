@@ -3,9 +3,7 @@ package service.order.storage;
 import org.springframework.stereotype.Repository;
 import service.order.models.Order;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,23 +49,82 @@ public class PostgresRepository implements Dao {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return null;
         }
-        System.out.println("User " + order.toString() + " created successfully");
+        System.out.println("Order " + order.toString() + " created successfully");
         return order;
     }
 
     @Override
-    public Object get(long id) {
-        return null;
+    public Order get(String id) {
+        Connection c = connectoRDS();
+        Statement statement;
+        Order foundOrder = null;
+
+        try {
+            statement = c.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM ORDERS;");
+            while (rs.next()) {
+                String currentOrderId = rs.getString("id");
+                String currentUserId = rs.getString("userid");
+                ArrayList<String> currentItems = sqlArrayToArrayList(rs.getArray("items"));
+                boolean currentIsPayed = rs.getBoolean("ispayed");
+
+                if (currentOrderId.equals(id)) {
+                    foundOrder = new Order(currentOrderId, currentUserId, currentItems, currentIsPayed);
+                }
+            }
+            rs.close();
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        if (foundOrder != null) {
+            System.out.println("Stock found successfully");
+            return foundOrder;
+        } else {
+            System.out.println("Stock not found");
+            return null;
+        }
     }
 
     @Override
-    public Object update(long id, Object o) {
-        return null;
+    public Order update(Object o) {
+        Order order = (Order) o;
+        Connection c = connectoRDS();
+        Statement statement;
+
+        try {
+            statement = c.createStatement();
+            String sql = "UPDATE ORDERS set ITEMS = " + itemListToString(order.getItems()) + ", ISPAYED = " + Boolean.toString(order.getPaymentStatus()) + " where ID='" + order.getOrderId() + "' and USERID='" + order.getUserId() + "';";
+            statement.executeUpdate(sql);
+
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }
+        System.out.println("Update done successfully");
+        return order;
     }
 
     @Override
-    public boolean delete(long id) {
-        return false;
+    public boolean delete(Object o) {
+        Connection c = connectoRDS();
+        Order order = (Order) o;
+        Statement statement;
+        try {
+            statement = c.createStatement();
+            String sql = "DELETE from ORDERS where ID = '" + order.getOrderId() + "';";
+            statement.executeUpdate(sql);
+            statement.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return false;
+        }
+        System.out.println("Deletion done successfully");
+        return true;
     }
 
     /**
@@ -77,7 +134,7 @@ public class PostgresRepository implements Dao {
      * @return SQL-valid string
      */
     private static String orderSQLFormat(Order order) {
-        String orderId = order.getorderId();
+        String orderId = order.getOrderId();
         String userId = order.getUserId();
 
 
@@ -94,6 +151,18 @@ public class PostgresRepository implements Dao {
             }
         }
         return result + "}'";
+    }
+
+
+    private static ArrayList<String> sqlArrayToArrayList(Array items) throws SQLException {
+        ArrayList<String> result = new ArrayList<>();
+
+        String[] currentItemsList = (String[]) items.getArray();
+        for (String s : currentItemsList) {
+            result.add(s);
+        }
+
+        return result;
     }
 
 }
