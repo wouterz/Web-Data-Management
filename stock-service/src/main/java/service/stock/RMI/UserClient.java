@@ -11,18 +11,18 @@ public interface UserClient {
     long create();
 
     @DeleteMapping("/user/{user_id}")
-    boolean remove(@PathVariable(value = "user_id") long user_id);
+    boolean remove(@PathVariable(value = "user_id") String user_id);
 
     @GetMapping("/user/{user_id}")
-    String find(@PathVariable(value = "user_id") long user_id);
+    String find(@PathVariable(value = "user_id") String user_id);
 
     @GetMapping("/user/{user_id}/credit")
-    public long getCredits(@PathVariable(value = "user_id") long user_id);
+    public long getCredits(@PathVariable(value = "user_id") String user_id);
 
     @PostMapping("/user/{user_id}/credit/add/{amount}")
-    public Boolean addCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount) throws JsonProcessingException;
+    public Boolean addCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") String amount) throws JsonProcessingException;
 
     @PostMapping("/user/{user_id}/credit/subtract/{amount}")
-    public Boolean subtractCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount);
+    public Boolean subtractCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount);
 
 }
