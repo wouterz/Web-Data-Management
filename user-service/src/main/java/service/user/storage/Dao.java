@@ -6,7 +6,7 @@ public interface Dao<T> {
 
     T get(String id);
 
-    String update(String id, long credit);
+    T update(T t);
 
-    boolean delete(T t);
+    boolean delete(String paymentId);
 }

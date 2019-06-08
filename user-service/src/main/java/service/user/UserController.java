@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{user_id}")
-    public boolean remove(@PathVariable(value = "user_id") long user_id) {
+    public boolean remove(@PathVariable(value = "user_id") String user_id) {
         LOGGER.info("Request DELETE: /user/remove/" + user_id);
 
         return localRepository.delete(user_id);
@@ -54,7 +54,7 @@ public class UserController {
     public boolean addCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount) {
         User user = (User)localRepository.get(user_id);
         user.setCredits(user.getCredits() + amount);
-        localRepository.update(user_id, user.getCredits());
+        localRepository.update(user);
 
         return true;
     }
@@ -68,7 +68,7 @@ public class UserController {
         }
 
         user.setCredits(user.getCredits() - amount);
-        localRepository.update(user_id, user.getCredits());
+        localRepository.update(user);
 
         return true;
     }

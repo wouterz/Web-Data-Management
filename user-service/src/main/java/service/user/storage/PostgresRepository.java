@@ -98,18 +98,19 @@ public class PostgresRepository implements Dao {
     /**
      * Updates the table entry corresponding to user
      *
-     * @param id Id of the user to be updated in the table
-     * @param credit Credit to be updated in the table
+     * Object o User to be updated in the database
+     *
      * @return The id of updated user if successful, null otherwise
      */
     @Override
-    public String update(String id, long credit) {
+    public User update(Object o) {
         Connection c = connectoRDS();
         Statement statement;
+        User user = (User) o;
 
         try {
             statement = c.createStatement();
-            String sql = "UPDATE USERS set CREDITS = " + Long.toString(credit) + " where ID='" + id + "';";
+            String sql = "UPDATE USERS set CREDITS = " + Long.toString(user.getCredits()) + " where ID='" + user.getId() + "';";
             statement.executeUpdate(sql);
 
             statement.close();
@@ -119,23 +120,22 @@ public class PostgresRepository implements Dao {
             return null;
         }
         System.out.println("Update done successfully");
-        return id;
+        return user;
     }
 
     /**
      * Deletes the given user from the database
-     * @param o User to be deleted from the database
+     * @param userId Id of the user to be deleted
      * @return True if deletion done or nothing done, false if something went wrong
      */
     @Override
-    public boolean delete(Object o) {
-        User user = (User) o;
+    public boolean delete(String userId) {
         Connection c = connectoRDS();
         Statement statement;
 
         try {
             statement = c.createStatement();
-            String sql = "DELETE from USERS where ID ='" + user.getId() + "';";
+            String sql = "DELETE from USERS where ID ='" + userId + "';";
             statement.executeUpdate(sql);
             statement.close();
             c.close();
