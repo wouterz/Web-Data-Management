@@ -108,7 +108,7 @@ public class PostgresRepository implements Dao {
         Statement statement;
         try {
             statement = c.createStatement();
-            String sql = "UPDATE STOCKITEM set STOCK = " + Integer.toString(stockItem.getStock()) + " where ID=" + stockItem.getId() + ";";
+            String sql = "UPDATE STOCKITEM set STOCK = " + Integer.toString(stockItem.getStock()) + " where ID='" + stockItem.getId() + "' and NAME='" + stockItem.getName() + "';";
             statement.executeUpdate(sql);
 
             statement.close();
@@ -134,7 +134,7 @@ public class PostgresRepository implements Dao {
         Statement statement;
         try {
             statement = c.createStatement();
-            String sql = "DELETE from STOCKITEM where ID = " + stock.getId() + ";";
+            String sql = "DELETE from STOCKITEM where ID = '" + stock.getId() + "';";
             statement.executeUpdate(sql);
             statement.close();
             c.close();
