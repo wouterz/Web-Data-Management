@@ -44,7 +44,7 @@ public class PostgresRepository implements Dao {
         User user = (User) o;
         try {
             statement = c.createStatement();
-            String sql = "INSERT INTO USERS (ID,CREDIT) "
+            String sql = "INSERT INTO USERS (ID,CREDITS) "
                     + "VALUES (" + userSQLFormat(user) + ");";
             statement.executeUpdate(sql);
             statement.close();
@@ -74,7 +74,7 @@ public class PostgresRepository implements Dao {
             ResultSet rs = statement.executeQuery("SELECT * FROM USERS;");
             while (rs.next()) {
                 String currentId = rs.getString("id");
-                long credit = rs.getLong("credit");
+                long credit = rs.getLong("credits");
 
                 if (currentId.equals(id)) {
                     foundUser = new User(currentId, credit);
@@ -109,7 +109,7 @@ public class PostgresRepository implements Dao {
 
         try {
             statement = c.createStatement();
-            String sql = "UPDATE USERS set CREDIT = " + Long.toString(credit) + " where ID=" + id + ";";
+            String sql = "UPDATE USERS set CREDITS = " + Long.toString(credit) + " where ID='" + id + "';";
             statement.executeUpdate(sql);
 
             statement.close();
@@ -125,7 +125,7 @@ public class PostgresRepository implements Dao {
     /**
      * Deletes the given user from the database
      * @param o User to be deleted from the database
-     * @return True if successful, false otherwise
+     * @return True if deletion done or nothing done, false if something went wrong
      */
     @Override
     public boolean delete(Object o) {
@@ -135,16 +135,15 @@ public class PostgresRepository implements Dao {
 
         try {
             statement = c.createStatement();
-            String sql = "DELETE from USERS where ID = " + user.getId() + ";";
+            String sql = "DELETE from USERS where ID ='" + user.getId() + "';";
             statement.executeUpdate(sql);
             statement.close();
             c.close();
+            return true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return false;
         }
-        System.out.println("Deletion done successfully");
-        return true;
     }
 
     /**
@@ -157,6 +156,6 @@ public class PostgresRepository implements Dao {
         String idString = user.getId();
         String creditString = Long.toString(user.getCredits());
 
-        return idString + ", " + creditString;
+        return "'" + idString + "', '" + creditString + "'";
     }
 }
