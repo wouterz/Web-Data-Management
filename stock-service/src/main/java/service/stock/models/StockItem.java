@@ -47,5 +47,4 @@ public class StockItem implements Serializable {
     public int getStock() {
         return this.stock;
     }
-
 }

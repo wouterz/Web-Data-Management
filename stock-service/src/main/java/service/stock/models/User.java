@@ -1,12 +1,16 @@
 package service.stock.models;
 
-public class User {
+import java.io.Serializable;
+import java.util.UUID;
+
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
 
 
-    private final Long id;
+    private final String id;
     private long credits;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -18,7 +22,20 @@ public class User {
                 '}';
     }
 
-    public User(long id, long credits) {
+    /**
+     * Constructor for new users
+     */
+    public User() {
+        this.id = UUID.randomUUID().toString();
+        this.credits = 0;
+    }
+
+    /**
+     * Constructor for users retrieved from the dataabse
+     * @param id Id of the user
+     * @param credits Credit of the user
+     */
+    public User(String id, long credits) {
         this.id = id;
         this.credits = credits;
     }
