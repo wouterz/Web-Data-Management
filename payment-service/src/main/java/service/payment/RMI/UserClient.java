@@ -9,9 +9,9 @@ import service.payment.models.StockItem;
 public interface UserClient {
 
     @PostMapping("/user/{user_id}/credit/add/{amount}")
-    Boolean addCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount);
+    Boolean addCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount);
 
     @PostMapping("/user/{user_id}/credit/subtract/{amount}")
-    Boolean subtractCredits(@PathVariable(value = "user_id") long user_id, @PathVariable(value = "amount") long amount);
+    Boolean subtractCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount);
 
 }

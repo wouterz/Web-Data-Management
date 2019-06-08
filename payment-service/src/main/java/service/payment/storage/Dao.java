@@ -1,12 +1,11 @@
 package service.payment.storage;
 
 public interface Dao<T> {
+    T create(T t);
 
-    String create(long id);
+    T get(String id);
 
-    T get(long id);
+    T update(T t);
 
-    T update(long id, T t);
-
-    boolean delete(long id);
+    boolean delete(String paymentId);
 }
