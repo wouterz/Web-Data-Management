@@ -22,9 +22,9 @@ public class UserTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserTest.class);
 
-    @Autowired
-    private Processor processor;
-    @Autowired
+    //@Autowired
+    //private Processor processor;
+    //@Autowired
     private MessageCollector messageCollector;
 
 /*
