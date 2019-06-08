@@ -1,28 +1,28 @@
 package service.payment.storage;
 
 import org.springframework.stereotype.Repository;
+import service.payment.models.Payment;
 
 @Repository
 public class RedisRepository implements Dao {
 
-
     @Override
-    public String create(long id) {
-        return "0";
-    }
-
-    @Override
-    public Object get(long id) {
+    public Payment create(Object o) {
         return null;
     }
 
     @Override
-    public Object update(long id, Object o) {
+    public Payment get(String id) {
         return null;
     }
 
     @Override
-    public boolean delete(long id) {
+    public Payment update(Object o) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(String id) {
         return false;
     }
 }
