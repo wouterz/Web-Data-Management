@@ -10,12 +10,26 @@ public class Payment {
 
     private String id;
     private PaymentStatus paymentStatus;
-    private long userId;
-    private long orderId;
+    private String userId;
+    private String orderId;
     private long credits;
 
-    public Payment(long id, PaymentStatus paymentStatus, long userId, long orderId, long credits) {
+    /**
+     * Constructor for new payments
+     */
+    public Payment(PaymentStatus paymentStatus, String userId, String orderId, long credits) {
         this.id = UUID.randomUUID().toString();
+        this.paymentStatus = paymentStatus;
+        this.userId = userId;
+        this.orderId = orderId;
+        this.credits = credits;
+    }
+
+    /**
+     * Constructor for existing payments from the database
+     */
+    public Payment(String id, PaymentStatus paymentStatus, String userId, String orderId, long credits) {
+        this.id = id;
         this.paymentStatus = paymentStatus;
         this.userId = userId;
         this.orderId = orderId;
@@ -34,19 +48,19 @@ public class Payment {
         this.paymentStatus = paymentStatus;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public long getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 

@@ -3,54 +3,70 @@ package service.payment.models;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-// import org.springframework.stereotype.Repository;
-// import org.springframework.data.redis.core.RedisHash;
-
-
-// @RedisHash("Order")
-public class Order implements Serializable{
-
-    // ??
+public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     // Identifier for this order
-    private final long orderId;
+    private final String orderId;
     // User that owns this order
-    private final long userId;
+    private final String userId;
     // list of item ids
-    private List<Long> items;
-
+    private List<String> items;
     // need this?
     private boolean isPayed;
 
 
-    public Order(long userId, long orderId) {
+    /**
+     * Constructor for creating a new order
+     *
+     * @param userId
+     */
+    public Order(String userId) {
         this.userId = userId;
-        this.orderId = orderId;
-
+        this.orderId = UUID.randomUUID().toString();
 
         this.items = new ArrayList<>();
         this.isPayed = false;
     }
 
-    public long getorderId() {
+    /**
+     * Constructor for creating an existing order from the database
+     */
+    public Order(String orderId, String userId, ArrayList<String> items, boolean isPayed) {
+        this.userId = userId;
+        this.orderId = orderId;
+        this.items = items;
+        this.isPayed = isPayed;
+    }
+
+    public String getOrderId() {
         return orderId;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public List<Long> getItems() {
+
+    public List<String> getItems() {
         return items;
     }
-    public boolean getPaymentStatus(){
+
+    public boolean getPaymentStatus() {
         return isPayed;
     }
-    // TODO: implement
-    public boolean addItem() {
-        return true;
+
+    public Order addItem(String itemId) {
+        this.items.add(itemId);
+
+        return this;
     }
 
+    public Order removeItem(long itemId) {
+        this.items.remove(itemId);
+
+        return this;
+    }
 }
 
