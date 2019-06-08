@@ -2,12 +2,12 @@ package service.order.storage;
 
 import org.springframework.stereotype.Repository;
 import service.order.models.Order;
-import service.order.models.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class PostgresRepository implements Dao {
@@ -81,10 +81,10 @@ public class PostgresRepository implements Dao {
         String userId = order.getUserId();
 
 
-        return "'" + orderId + "', '" + userId + "', ";
+        return "'" + orderId + "', '" + userId + "', " + itemListToString(order.getItems()) + ", " + Boolean.toString(order.getPaymentStatus());
     }
 
-    private static String itemListToString(ArrayList<String> items) {
+    private static String itemListToString(List<String> items) {
         String result = "'{";
         for (int j = 0; j < items.size(); j++) {
             if (j == items.size() - 1) {
