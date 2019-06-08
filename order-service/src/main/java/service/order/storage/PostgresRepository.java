@@ -109,13 +109,12 @@ public class PostgresRepository implements Dao {
     }
 
     @Override
-    public boolean delete(Object o) {
+    public boolean delete(String orderId) {
         Connection c = connectoRDS();
-        Order order = (Order) o;
         Statement statement;
         try {
             statement = c.createStatement();
-            String sql = "DELETE from ORDERS where ID = '" + order.getOrderId() + "';";
+            String sql = "DELETE from ORDERS where ID = '" + orderId + "';";
             statement.executeUpdate(sql);
             statement.close();
             c.close();

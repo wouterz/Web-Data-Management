@@ -15,10 +15,10 @@ public interface StockClient {
 
     // Add to the stock of an item by supplying the id
     @RequestMapping(value= "/stock/add/{id}/{amount}", method=POST)
-    public StockItem addStock(@PathVariable(value="id") long id, @PathVariable(value="amount") int amount);
+    public StockItem addStock(@PathVariable(value="id") String id, @PathVariable(value="amount") int amount);
 
     // Subtract from the stock of an item by supplying the id
     @RequestMapping(value= "/stock/subtract/{id}/{amount}", method=POST)
-    public StockItem subtractStock(@PathVariable(value="id") long id, @PathVariable(value="amount") int amount);
+    public StockItem subtractStock(@PathVariable(value="id") String id, @PathVariable(value="amount") int amount);
 
 }
