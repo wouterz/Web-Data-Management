@@ -63,7 +63,7 @@ public class Order implements Serializable {
         return this;
     }
 
-    public Order removeItem(long itemId) {
+    public Order removeItem(String itemId) {
         this.items.remove(itemId);
 
         return this;
