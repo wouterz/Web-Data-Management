@@ -43,3 +43,5 @@ ribbon:
   eureka:
     enabled: true
   listOfServers: stock-service, payment-service, user-service
+  ConnectTimeout:  1000000000
+  ReadTimeout:  1000000000

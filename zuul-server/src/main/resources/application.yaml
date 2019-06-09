@@ -55,5 +55,6 @@ hystrix:
 
 hystrix.command.default.execution.timeout.enabled: false
 ribbon:
-  ConnectTimeout:  1000000
-  ReadTimeout:  1000000
+  ConnectTimeout:  1000000000
+  ReadTimeout:  1000000000
+  listOfServers: stock-service, payment-service, user-service, order-service
