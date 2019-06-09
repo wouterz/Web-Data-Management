@@ -21,4 +21,7 @@ public interface StockClient {
     @RequestMapping(value= "/stock/subtract/{id}/{amount}", method=POST)
     public StockItem subtractStock(@PathVariable(value="id") String id, @PathVariable(value="amount") int amount);
 
+    @RequestMapping(value= "/stock/find/{id}", method=GET)
+    public StockItem findStockItem(@PathVariable(value="id") String id);
+
 }

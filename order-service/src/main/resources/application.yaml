@@ -42,3 +42,4 @@ eureka:
 ribbon:
   eureka:
     enabled: true
+  listOfServers: stock-service, payment-service, user-service

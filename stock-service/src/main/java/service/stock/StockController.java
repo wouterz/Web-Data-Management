@@ -68,4 +68,11 @@ public class StockController {
 
         return "This is the stock service";
     }
+
+    @RequestMapping(value = "/stock/find/{id}", method = GET)
+    public StockItem findStockItem(@PathVariable(value = "id") String id) {
+        // Should get Stock item from database
+
+        return ((StockItem) localRepository.get(id));
+    }
 }

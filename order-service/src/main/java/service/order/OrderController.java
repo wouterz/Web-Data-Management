@@ -119,4 +119,11 @@ public class OrderController {
         return "This is the order service";
     }
 
+
+    @GetMapping("/find/item/{itemId}")
+    public StockItem itemFind(@PathVariable String itemId) {
+        StockItem s = stockClient.findStockItem(itemId);
+        return s;
+    }
+
 }
