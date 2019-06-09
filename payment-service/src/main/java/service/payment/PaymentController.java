@@ -51,13 +51,12 @@ public class PaymentController {
     }
 
 
-    @PostMapping("/payment/cancel/{user_id}/{order_id}")
-    public String cancel(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "order_id") String order_id) {
-        LOGGER.info("Request: /payment/cancel/ user " + user_id + "/ order " + order_id);
+    @PostMapping("/payment/cancel/{payment_id}/{user_id}")
+    public String cancel(@PathVariable(value = "payment_id") String payment_id, @PathVariable(value = "user_id") String user_id) {
+        LOGGER.info("Request: /payment/cancel/ payment " + payment_id + "/ user " + user_id);
 
-//        TODO - reverse of create
-        //        TODO get by orderID
-        Payment payment = localRepository.getPaymentByOrderAndUserId(user_id, order_id);
+        //  Reverse of create
+        Payment payment = localRepository.get(payment_id);
         if(userClient.addCredits(user_id, payment.getCredits())) {
             localRepository.delete(payment.getId());
             return "1";
