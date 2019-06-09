@@ -87,6 +87,29 @@ public class PostgresRepository implements Dao {
         }
     }
 
+    @SuppressWarnings("Duplicates")
+    public Order alternativeGet(String id) {
+        Connection c = connectoRDS();
+        Statement statement;
+
+        try {
+            statement = c.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM ORDERS WHERE ID ='" + id + "';");
+            rs.next();
+            String currentOrderId = rs.getString("id");
+            String currentUserId = rs.getString("userid");
+            ArrayList<String> currentItems = sqlArrayToArrayList(rs.getArray("items"));
+            boolean currentIsPayed = rs.getBoolean("ispayed");
+            statement.close();
+            c.close();
+
+            return new Order(currentOrderId, currentUserId, currentItems, currentIsPayed);
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }
+    }
+
     @Override
     public Order update(Object o) {
         Order order = (Order) o;
