@@ -39,15 +39,12 @@ public class PaymentController {
     public String create(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "order_id") String order_id) {
         LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
 
-//        TODO
-//        totalCost = orderClient.
-        int totalCost = 20;
-
+        Order order = orderClient.orderFind(order_id);
+        int totalCost = order.getItems().size();
 //        subtract credits
         if (userClient.subtractCredits(user_id, totalCost)) {
             Payment payment = new Payment(Payment.PaymentStatus.PAID, user_id, order_id, totalCost);
-            localRepository.create(payment);
-            return "1";
+            return localRepository.create(payment).getId();
         } else {
             return "-1";
         }
