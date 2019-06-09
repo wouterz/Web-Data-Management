@@ -7,6 +7,7 @@ import service.order.RMI.StockClient;
 import service.order.models.Order;
 import service.order.storage.Dao;
 import service.order.storage.RedisRepository;
+import service.order.storage.PostgresRepository;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,7 +21,7 @@ public class OrderController {
 
     @Autowired
     private
-    RedisRepository localRepository;
+    PostgresRepository localRepository;
 
     @Autowired
     private
@@ -35,7 +36,7 @@ public class OrderController {
     // POST - create order for userId, return orderId
     @PostMapping("/create/{userId}")
     public String orderCreate(@PathVariable(value = "userId") long userId) {
-        return localRepository.create(userId);
+        return localRepository.create(userId).getOrderId();
     }
 
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.stock.models.StockItem;
 import service.stock.storage.RedisRepository;
+import service.stock.storage.PostgresRepository;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -17,7 +18,7 @@ public class StockController {
 
 
     @Autowired
-    private RedisRepository localRepository;
+    private PostgresRepository localRepository;
 
     // Create a new stock item by supplying the name
     @RequestMapping(value = "/stock/item/create", method = POST)

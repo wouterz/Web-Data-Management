@@ -38,7 +38,22 @@ eureka:
     registerWithEureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: ${EUREKA_URI/eureka}
+      #defaultZone: ${EUREKA_URI:8761/eureka}
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
 
   instance:
     preferIpAddress: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 99999999
+
+
+hystrix.command.default.execution.timeout.enabled: false
+ribbon:
+  ConnectTimeout:  10000
+  ReadTimeout:  10000
