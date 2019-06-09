@@ -17,6 +17,5 @@ import service.payment.models.Order;
 public interface OrderClient {
 
     @RequestMapping(value="/order/find/{orderId}", method=GET)
-    // GET - retrieve info about orderId: pay status, items, userId
     Order orderFind(@PathVariable String orderId);
 }

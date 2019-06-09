@@ -40,17 +40,20 @@ public class PaymentController {
 
     @PostMapping("/payment/pay/{user_id}/{order_id}")
     public String create(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "order_id") String order_id) {
-        LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
-
+//        LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
+//
         Order order = orderClient.orderFind(order_id);
         int totalCost = order.getItems().size();
 //        subtract credits
-        if (userClient.subtractCredits(user_id, totalCost)) {
+        boolean subtractSuccess = userClient.subtractCredits(user_id, totalCost);
+
+        if (subtractSuccess) {
             Payment payment = new Payment(Payment.PaymentStatus.PAID, user_id, order_id, totalCost);
             return localRepository.create(payment).getId();
         } else {
             return "-1";
         }
+
     }
 
 

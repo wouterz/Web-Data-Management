@@ -52,7 +52,7 @@ public class UserController {
 
     @PostMapping("/user/{user_id}/credit/add/{amount}")
     public boolean addCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount) {
-        User user = (User)localRepository.get(user_id);
+        User user = localRepository.get(user_id);
         user.setCredits(user.getCredits() + amount);
         localRepository.update(user);
 
@@ -61,9 +61,9 @@ public class UserController {
 
     @PostMapping("/user/{user_id}/credit/subtract/{amount}")
     public boolean subtractCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount) {
-        User user = (User)localRepository.get(user_id);
+        User user = localRepository.get(user_id);
 
-        if (user.getCredits() > amount) {
+        if (user.getCredits() < amount) {
             return false;
         }
 

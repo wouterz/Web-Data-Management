@@ -63,35 +63,35 @@ public class OrderController {
     // POST - add item with itemId to orderId
     public Order orderAddItem(@PathVariable(value = "orderId") String orderId, @PathVariable(value = "itemId") String itemId) {
         // get order - orderId
-        Order o = (Order)localRepository.get(orderId);
+        Order o = localRepository.get(orderId);
         o.addItem(itemId);
 
-        return (Order)localRepository.update(o);
+        return localRepository.update(o);
     }
 
     @DeleteMapping("/removeItem/{orderId}/{itemId}")
     // DELETE/POST - remove itemId from orderId
     public Order orderRemoveItem(@PathVariable(value = "orderId") String orderId, @PathVariable(value = "itemId") String itemId) {
         // get order - orderId
-        Order o = (Order)localRepository.get(orderId);
+        Order o = localRepository.get(orderId);
         // remove item:itemId from order
         o.removeItem(itemId);
-        return (Order)localRepository.update(o);
+        return localRepository.update(o);
     }
 
     // POST - make payment (call pay service), subtract stock(stock service)
     //          return status (success/fail)
     @PostMapping("/checkout/{orderId}")
-    public boolean orderCheckout(@PathVariable(value = "orderId") String orderId) {
+    public String orderCheckout(@PathVariable(value = "orderId") String orderId) {
         // get order - orderId
-        Order o = (Order)localRepository.get(orderId);
+        Order o = localRepository.get(orderId);
 
         
         // checkout order
         String paymentId = paymentClient.create(o.getUserId(), orderId);
         // payment failed
         if (paymentId.equals("-1") ) {
-            return false;
+            return "payment create fail";
         }
         // checkout order
         List<String> subtractedItems = new ArrayList<>();
@@ -100,24 +100,31 @@ public class OrderController {
             if (updatedStock != null) {
                 subtractedItems.add(updatedStock.getId());
             } else {
-                paymentClient.cancel(o.getUserId(), orderId);
+                paymentClient.cancel(paymentId, o.getUserId());
                 for (String toReset : subtractedItems) {
                     StockItem resetItem =  stockClient.addStock(toReset, 1);
                     if (resetItem == null) {
                         throw new RuntimeException("could not reset db, inconsistent");
                     }
                 }
-                return false;
+                return paymentId;
             }
         }
 
         o.setPayed(true);
         Order updated = localRepository.update(o);
         if (updated == null) {
-            return false;
+            paymentClient.cancel(paymentId, o.getUserId());
+            for (String toReset : subtractedItems) {
+                StockItem resetItem =  stockClient.addStock(toReset, 1);
+                if (resetItem == null) {
+                    throw new RuntimeException("could not reset db, inconsistent");
+                }
+            }
+            return "failed to update object";
         }
 
-        return true;
+        return paymentId;
     }
 
 
@@ -129,8 +136,7 @@ public class OrderController {
 
     @GetMapping("/find/item/{itemId}")
     public StockItem itemFind(@PathVariable String itemId) {
-        StockItem s = stockClient.findStockItem(itemId);
-        return s;
+        return stockClient.findStockItem(itemId);
     }
 
 }

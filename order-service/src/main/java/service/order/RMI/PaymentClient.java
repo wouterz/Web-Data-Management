@@ -17,8 +17,8 @@ public interface PaymentClient {
     @RequestMapping(value="/payment/pay/{user_id}/{order_id}", method=POST)
     public String create(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "order_id") String order_id);
 
-    @RequestMapping(value="/payment/cancel/{user_id}/{order_id}", method=POST)
-    public String cancel(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "order_id") String order_id);
+    @PostMapping("/payment/cancel/{payment_id}/{user_id}")
+    public String cancel(@PathVariable(value = "payment_id") String payment_id, @PathVariable(value = "user_id") String user_id);
 
     @RequestMapping(value="/payment/status/{order_id}", method=GET)
     public String status(@PathVariable(value = "order_id") String order_id);
