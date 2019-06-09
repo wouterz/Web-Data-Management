@@ -15,6 +15,9 @@ import service.payment.storage.Dao;
 import service.payment.storage.PostgresRepository;
 import service.payment.storage.RedisRepository;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @RestController
 public class PaymentController {
 
@@ -77,6 +80,13 @@ public class PaymentController {
     public String endpoint() {
 
         return "This is the payment service";
+    }
+
+
+    @GetMapping("/payment/order/{orderId}")
+    public Order orderFind(@PathVariable String orderId) {
+        Order o = orderClient.orderFind(orderId);
+        return o;
     }
     
 

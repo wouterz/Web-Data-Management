@@ -86,13 +86,13 @@ public class OrderController {
         // get order - orderId
         Order o = (Order)localRepository.get(orderId);
 
-        /*
+        
         // checkout order
         String paymentId = paymentClient.create(o.getUserId(), orderId);
         // payment failed
         if (paymentId.equals("-1") ) {
             return false;
-        }*/
+        }
         // checkout order
         List<String> subtractedItems = new ArrayList<>();
         for (String item : o.getItems()) {
