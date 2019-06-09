@@ -99,6 +99,7 @@ public class OrderController {
             if (updatedStock != null) {
                 subtractedItems.add(updatedStock.getId());
             } else {
+                paymentClient.cancel(o.getUserId(), orderId);
                 for (String toReset : subtractedItems) {
                     StockItem resetItem =  stockClient.addStock(toReset, 1);
                     if (resetItem == null) {
