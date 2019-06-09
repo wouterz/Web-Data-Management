@@ -37,7 +37,7 @@ public class PostgresRepository implements Dao {
         Connection c = connectoRDS();
 
         Statement statement;
-        Order order = (Order) o;
+        Order order = new Order(o.toString());
         try {
             statement = c.createStatement();
             String sql = "INSERT INTO ORDERS (ID,USERID,ITEMS,ISPAYED) "
