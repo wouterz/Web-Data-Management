@@ -34,8 +34,8 @@ services:
     environment:
       eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
 
-  payment:
-    build: ./payment-service
+  stock:
+    build: ./stock-service
     ports:
       - "0:80"
     networks:
@@ -46,7 +46,6 @@ services:
       - eureka
     environment:
       eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
-
 
 networks:
   spring:
