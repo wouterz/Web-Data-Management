@@ -8,10 +8,10 @@ import service.payment.models.StockItem;
 @FeignClient("user-service")
 public interface UserClient {
 
-    @RequestMapping("/user/{user_id}/credit/add/{amount}")
+    @RequestMapping(value = "/user/{user_id}/credit/add/{amount}", method = RequestMethod.POST)
     Boolean addCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount);
 
-    @RequestMapping("/user/{user_id}/credit/subtract/{amount}")
+    @RequestMapping(value = "/user/{user_id}/credit/subtract/{amount}", method = RequestMethod.POST)
     Boolean subtractCredits(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "amount") long amount);
 
 }

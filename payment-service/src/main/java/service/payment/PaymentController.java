@@ -73,7 +73,7 @@ public class PaymentController {
         LOGGER.info("Request: /payment/status/order " + order_id);
 
 //        TODO get by orderID --> OrderId is not enough to find a payment right?
-        return ((Payment)localRepository.get(order_id)).getPaymentStatus();
+        return localRepository.get(order_id).getPaymentStatus();
     }
 
     @GetMapping("/payment")
@@ -85,8 +85,7 @@ public class PaymentController {
 
     @GetMapping("/payment/order/{orderId}")
     public Order orderFind(@PathVariable String orderId) {
-        Order o = orderClient.orderFind(orderId);
-        return o;
+        return orderClient.orderFind(orderId);
     }
     
 

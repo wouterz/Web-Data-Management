@@ -60,7 +60,7 @@ public class StockController {
         item.addToStock(amount);
 
         // Save the changes to the database
-        return (StockItem) localRepository.update(item);
+        return localRepository.update(item);
     }
 
     @GetMapping("/stock")

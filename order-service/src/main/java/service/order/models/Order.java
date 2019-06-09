@@ -64,6 +64,10 @@ public class Order implements Serializable {
         return this;
     }
 
+    public void setPayed(boolean payed) {
+        isPayed = payed;
+    }
+
     public Order removeItem(String itemId) {
         this.items.remove(itemId);
 

@@ -111,6 +111,12 @@ public class OrderController {
             }
         }
 
+        o.setPayed(true);
+        Order updated = localRepository.update(o);
+        if (updated == null) {
+            return false;
+        }
+
         return true;
     }
 
