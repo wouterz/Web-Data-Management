@@ -59,6 +59,10 @@ public class StockController {
         // Change stock
         item.addToStock(amount);
 
+        if (item.getStock() < 0) {
+            return null;
+        }
+
         // Save the changes to the database
         return localRepository.update(item);
     }
