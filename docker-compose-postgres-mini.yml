@@ -1,0 +1,53 @@
+version: '3'
+services:
+  eureka:
+    build: ./eureka-server
+    ports:
+      - "8080:8761"
+      - "8761:8761"
+    networks:
+      - spring
+  zuul:
+    build: ./zuul-server
+    ports:
+      - "80:8762"
+      - "8762:8762"
+    networks:
+      - spring
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+
+  user:
+    build: ./user-service
+    ports:
+      - "0:80"
+    networks:
+      - spring
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+
+  payment:
+    build: ./payment-service
+    ports:
+      - "0:80"
+    networks:
+      - spring
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+
+
+networks:
+  spring:
+    external: true
