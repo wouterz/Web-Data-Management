@@ -88,6 +88,30 @@ public class PostgresRepository implements Dao {
         }
     }
 
+    @SuppressWarnings("Duplicates")
+    public Payment alternativeGet(String id) {
+        Connection c = connectoRDS();
+        Statement statement;
+
+        try {
+            statement = c.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM PAYMENT WHERE ID ='" + id + "';");
+            rs.next();
+            String currentPaymentId = rs.getString("id");
+            Payment.PaymentStatus paymentStatus = Payment.PaymentStatus.valueOf(rs.getString("paymentstatus"));
+            String currentUserId = rs.getString("userid");
+            String currentOrderId = rs.getString("orderid");
+            long currentCredits = rs.getLong("credits");
+            statement.close();
+            c.close();
+
+            return new Payment(currentPaymentId, paymentStatus, currentUserId, currentOrderId, currentCredits);
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }
+    }
+
     @Override
     public Payment update(Object o) {
         Payment payment = (Payment) o;

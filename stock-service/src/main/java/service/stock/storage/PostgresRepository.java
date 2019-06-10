@@ -97,6 +97,28 @@ public class PostgresRepository implements Dao {
         }
     }
 
+    @SuppressWarnings("Duplicates")
+    public StockItem alternativeGet(String id) {
+        Connection c = connectoRDS();
+        Statement statement;
+
+        try {
+            statement = c.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM STOCKITEM WHERE ID ='" + id + "';");
+            rs.next();
+            String currentId = rs.getString("id");
+            String name = rs.getString("name");
+            int stock = rs.getInt("stock");
+            statement.close();
+            c.close();
+
+            return new StockItem(currentId, name, stock);
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }
+    }
+
     /**
      * Updates the table entry corresponding to stock
      **/
