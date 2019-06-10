@@ -1,4 +1,5 @@
 from locust import HttpLocust, TaskSet, task
+from locust.exception import StopLocust
 import random
 import json
 
@@ -27,6 +28,8 @@ class UserBehavior(TaskSet):
         and save the userid for future requests """
 
         userResponse = self.client.post("/user/create")
+        if userResponse.status_code != 200:
+            raise StopLocust()
         self.userid = json.loads(userResponse.text)['id']
         self.client.post("/user/" + self.userid + "/credit/add/" + str(random.randint(1,10)))
 
@@ -35,10 +38,14 @@ class UserBehavior(TaskSet):
 
         # Create an initial order
         response = self.client.post("/order/create/" + self.userid)
+        if response.status_code != 200:
+            raise StopLocust()
         self.orders.append(Order(self.userid, response.text))
 
         # Make sure that at least one item exists
         response = self.client.post("/stock/item/create")
+        if response.status_code != 200:
+            raise StopLocust()
         self.orders[0].addItem(json.loads(response.text)['id'])
     
     def on_stop(self):
@@ -81,6 +88,8 @@ class UserBehavior(TaskSet):
     @task(5)
     def createNewOrder(self):
         response = self.client.post("/order/create/" + self.userid)
+        if response.status_code != 200:
+            raise StopLocust()
         orderObj = Order(self.userid, response.text)
         self.orders.append(orderObj)
 
@@ -109,6 +118,8 @@ class UserBehavior(TaskSet):
             randomID = randomOrder.orderid
 
             response = self.client.post("/stock/item/create")
+            if response.status_code != 200:
+                raise StopLocust()
             itemID = json.loads(response.text)['id']
 
             self.client.post("/order/addItem/" + randomID + "/" + itemID)
