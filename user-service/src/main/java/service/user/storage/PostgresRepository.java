@@ -11,25 +11,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PostgresRepository implements Dao {
 
+    private static Connection c = connectoRDS();
+
     /**
-     * Create a connection to the AWS Postgres database
-     *
-     * @return Connection to the database
+     * Connect to the AWS postgres instance
+     * @return true if successful, false otherwise
      */
     private static Connection connectoRDS() {
-        Connection c = null;
         try {
             c = DriverManager
                     .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
                             "webdata", "reverse123");
+            return c;
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Connected to database successfully");
-
-        return c;
+        return null;
     }
 
     /**
@@ -39,7 +38,6 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public User create(Object o) {
-        Connection c = connectoRDS();
         Statement statement;
         User user = (User) o;
         try {
@@ -48,7 +46,6 @@ public class PostgresRepository implements Dao {
                     + "VALUES (" + userSQLFormat(user) + ");";
             statement.executeUpdate(sql);
             statement.close();
-            c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return null;
@@ -65,7 +62,6 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public User get(String id) {
-        Connection c = connectoRDS();
         Statement statement;
         User foundUser = null;
 
@@ -82,7 +78,6 @@ public class PostgresRepository implements Dao {
             }
             rs.close();
             statement.close();
-            c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -97,7 +92,6 @@ public class PostgresRepository implements Dao {
 
     @SuppressWarnings("Duplicates")
     public User alternativeGet(String id) {
-        Connection c = connectoRDS();
         Statement statement;
 
         try {
@@ -125,7 +119,6 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public User update(Object o) {
-        Connection c = connectoRDS();
         Statement statement;
         User user = (User) o;
 
@@ -135,7 +128,6 @@ public class PostgresRepository implements Dao {
             statement.executeUpdate(sql);
 
             statement.close();
-            c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return null;
@@ -151,7 +143,6 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public boolean delete(String userId) {
-        Connection c = connectoRDS();
         Statement statement;
 
         try {
@@ -159,7 +150,6 @@ public class PostgresRepository implements Dao {
             String sql = "DELETE from USERS where ID ='" + userId + "';";
             statement.executeUpdate(sql);
             statement.close();
-            c.close();
             return true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
