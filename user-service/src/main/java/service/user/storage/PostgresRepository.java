@@ -23,6 +23,7 @@ public class PostgresRepository implements Dao {
             c = DriverManager
                     .getConnection("jdbc:postgresql://webdata2.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
                             "webdata2", "reverse123");
+        } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
