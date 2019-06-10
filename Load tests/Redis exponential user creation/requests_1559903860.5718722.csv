@@ -1,0 +1,3 @@
+"Method","Name","# requests","# failures","Median response time","Average response time","Min response time","Max response time","Average Content Size","Requests/s"
+"POST","/user/create",303097,7741,280,411,9,54727,5,436.39
+"None","Total",303097,7741,280,411,9,54727,5,436.39
