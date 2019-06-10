@@ -10,32 +10,28 @@ import java.util.List;
 @Repository
 public class PostgresRepository implements Dao {
 
+    private static Connection c = null;
 
     /**
-     * Create a connection to the AWS Postgres database
-     *
-     * @return Connection to the database
+     * Connect to the AWS postgres instance
+     * @return true if successful, false otherwise
      */
-    private static Connection connectoRDS() {
-        Connection c = null;
+    private static boolean connectoRDS() {
         try {
             c = DriverManager
                     .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
                             "webdata", "reverse123");
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Connected to database successfully");
-
-        return c;
+        return false;
     }
 
     @Override
     public Order create(Object o) {
-        Connection c = connectoRDS();
-
         Statement statement;
         Order order = new Order(o.toString());
         try {
@@ -55,7 +51,6 @@ public class PostgresRepository implements Dao {
 
     @Override
     public Order get(String id) {
-        Connection c = connectoRDS();
         Statement statement;
         Order foundOrder = null;
 
@@ -74,7 +69,6 @@ public class PostgresRepository implements Dao {
             }
             rs.close();
             statement.close();
-            c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -89,7 +83,6 @@ public class PostgresRepository implements Dao {
 
     @SuppressWarnings("Duplicates")
     public Order alternativeGet(String id) {
-        Connection c = connectoRDS();
         Statement statement;
 
         try {
@@ -101,7 +94,6 @@ public class PostgresRepository implements Dao {
             ArrayList<String> currentItems = sqlArrayToArrayList(rs.getArray("items"));
             boolean currentIsPayed = rs.getBoolean("ispayed");
             statement.close();
-            c.close();
 
             return new Order(currentOrderId, currentUserId, currentItems, currentIsPayed);
         } catch (Exception e) {
@@ -113,7 +105,6 @@ public class PostgresRepository implements Dao {
     @Override
     public Order update(Object o) {
         Order order = (Order) o;
-        Connection c = connectoRDS();
         Statement statement;
 
         try {
@@ -122,7 +113,6 @@ public class PostgresRepository implements Dao {
             statement.executeUpdate(sql);
 
             statement.close();
-            c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return null;
@@ -133,14 +123,12 @@ public class PostgresRepository implements Dao {
 
     @Override
     public boolean delete(String orderId) {
-        Connection c = connectoRDS();
         Statement statement;
         try {
             statement = c.createStatement();
             String sql = "DELETE from ORDERS where ID = '" + orderId + "';";
             statement.executeUpdate(sql);
             statement.close();
-            c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return false;
