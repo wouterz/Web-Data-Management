@@ -149,7 +149,7 @@ class UserBehavior(TaskSet):
             randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
 
             # Make sure that the order actually has some items to check out
-            if len(randomOrder.items > 0)
+            if len(randomOrder.items) > 0:
                 self.client.post("/order/checkout/" + randomOrder.orderid)
                 randomOrder.setPaid(True)
 
