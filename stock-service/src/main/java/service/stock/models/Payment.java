@@ -1,12 +1,15 @@
 package service.stock.models;
 
 import java.util.UUID;
+import java.io.Serializable;
+public class Payment implements Serializable{
 
-public class Payment {
-
-    public enum PaymentStatus {
+    public enum PaymentStatus{
         PAID, UNPAID
     }
+
+    private static final long serialVersionUID = 1L;
+
 
     private String id;
     private PaymentStatus paymentStatus;
