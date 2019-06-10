@@ -1,5 +1,6 @@
 from locust import HttpLocust, TaskSet, task
 import random
+import json
 
 class Order:
     # Constructor
@@ -26,7 +27,7 @@ class UserBehavior(TaskSet):
         and save the userid for future requests """
 
         userResponse = self.client.post("/user/create")
-        self.userid = userResponse.text
+        self.userid = json.loads(userResponse.text)['id']
         self.client.post("/user/" + self.userid + "/credit/add/" + str(random.randint(1,10)))
 
         # Create a list of orders for this user
@@ -38,7 +39,7 @@ class UserBehavior(TaskSet):
 
         # Make sure that at least one item exists
         response = self.client.post("/stock/item/create")
-        self.orders[0].addItem(response.text)
+        self.orders[0].addItem(json.loads(response.text)['id'])
     
     def on_stop(self):
         print("Finished")
@@ -108,7 +109,7 @@ class UserBehavior(TaskSet):
             randomID = randomOrder.orderid
 
             response = self.client.post("/stock/item/create")
-            itemID = response.text
+            itemID = json.loads(response.text)['id']
 
             self.client.post("/order/addItem/" + randomID + "/" + itemID)
             randomOrder.addItem(itemID)
@@ -179,13 +180,6 @@ class UserBehavior(TaskSet):
             randomOrder = paidOrders[random.randint(0, len(paidOrders)-1)]
             self.client.post("/payment/cancel/" + self.userid + "/" + randomOrder.orderid)
             randomOrder.setPaid(False)
-    
-    # Check the status of a random order
-    @task(10)
-    def getPaymentStatusRandomOrder(self):
-        if len(self.orders) > 0:
-            randomOrder = self.orders[random.randint(0, len(self.orders)-1)]
-            self.client.get("/payment/status/" + randomOrder.orderid)
     
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
