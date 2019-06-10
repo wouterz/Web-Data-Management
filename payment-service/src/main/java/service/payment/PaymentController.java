@@ -29,7 +29,7 @@ public class PaymentController {
 
 
     @Autowired
-    private RedisRepository localRepository;
+    private PostgresRepository localRepository;
 
     @Autowired
     private UserClient userClient;
