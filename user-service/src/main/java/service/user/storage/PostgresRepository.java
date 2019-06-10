@@ -21,9 +21,8 @@ public class PostgresRepository implements Dao {
         if (c != null) return;
         try {
             c = DriverManager
-                    .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
-                            "webdata", "reverse123");
-        } catch (Exception e) {
+                    .getConnection("jdbc:postgresql://webdata2.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
+                            "webdata2", "reverse123");
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
