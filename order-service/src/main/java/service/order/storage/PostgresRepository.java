@@ -10,24 +10,24 @@ import java.util.List;
 @Repository
 public class PostgresRepository implements Dao {
 
-    private static Connection c = null;
+    private static Connection c = connectoRDS();
 
     /**
      * Connect to the AWS postgres instance
      * @return true if successful, false otherwise
      */
-    private static boolean connectoRDS() {
+    private static Connection connectoRDS() {
         try {
             c = DriverManager
                     .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
                             "webdata", "reverse123");
-            return true;
+            return c;
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return false;
+        return null;
     }
 
     @Override
