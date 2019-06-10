@@ -53,7 +53,7 @@ services:
     image: "redis:alpine"
     command: [ "redis-server", "--protected-mode", "no", "--appendonly", "yes"]
     volumes:
-      - /data
+      - user-data:/data
     ports:
      - "6379:6379"
     networks:
@@ -63,7 +63,7 @@ services:
     image: "redis:alpine"
     command: [ "redis-server", "--protected-mode", "no", "--appendonly", "yes", "--port", "6380"  ]
     volumes:
-      - /data
+      - stock-data:/data
     ports:
      - "6380:6380"
     networks:
@@ -87,7 +87,7 @@ services:
     image: "redis:alpine"
     command: [ "redis-server", "--protected-mode", "no", "--appendonly", "yes", "--port", "6381"  ]
     volumes:
-      - /data
+      - payment-data:/data
     ports:
      - "6381:6381"
     networks:
@@ -111,7 +111,7 @@ services:
     image: "redis:alpine"
     command: [ "redis-server", "--protected-mode", "no", "--appendonly", "yes", "--port", "6382"  ]
     volumes:
-      - /data
+      - order-data:/data
     ports:
      - "6382:6382"
     networks:
@@ -120,3 +120,10 @@ services:
 networks:
   spring:
     external: true
+
+
+volumes:
+  user-data:
+  stock-data:
+  order-data:
+  payment-data:
