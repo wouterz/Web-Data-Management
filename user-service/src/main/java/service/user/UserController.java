@@ -17,7 +17,7 @@ public class UserController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    private RedisRepository localRepository;
+    private PostgresRepository localRepository;
 
     @PostMapping("/user/create")
     public User create() {
