@@ -29,7 +29,7 @@ public class PaymentController {
 
 
     @Autowired
-    private PostgresRepository localRepository;
+    private RedisRepository localRepository;
 
     @Autowired
     private UserClient userClient;
@@ -42,14 +42,14 @@ public class PaymentController {
     public String create(@PathVariable(value = "user_id") String user_id, @PathVariable(value = "order_id") String order_id) {
 //        LOGGER.info("Request: /payment/pay/ user " + user_id + "/ order " + order_id);
 //
-        Order order = orderClient.orderFind(order_id);
+        Order order = (Order)orderClient.orderFind(order_id);
         int totalCost = order.getItems().size();
 //        subtract credits
         boolean subtractSuccess = userClient.subtractCredits(user_id, totalCost);
 
         if (subtractSuccess) {
             Payment payment = new Payment(Payment.PaymentStatus.PAID, user_id, order_id, totalCost);
-            return localRepository.create(payment).getId();
+            return ((Payment)localRepository.create(payment)).getId();
         } else {
             return "-1";
         }
@@ -62,7 +62,7 @@ public class PaymentController {
         LOGGER.info("Request: /payment/cancel/ payment " + payment_id + "/ user " + user_id);
 
         //  Reverse of create
-        Payment payment = localRepository.get(payment_id);
+        Payment payment = (Payment)localRepository.get(payment_id);
         if(userClient.addCredits(user_id, payment.getCredits())) {
             localRepository.delete(payment.getId());
             return "1";
@@ -76,7 +76,7 @@ public class PaymentController {
         LOGGER.info("Request: /payment/status/order " + order_id);
 
 //        TODO get by orderID --> OrderId is not enough to find a payment right?
-        return localRepository.get(order_id).getPaymentStatus();
+        return ((Payment)localRepository.get(order_id)).getPaymentStatus();
     }
 
     @GetMapping("/payment")

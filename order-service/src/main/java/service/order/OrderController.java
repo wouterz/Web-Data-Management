@@ -24,7 +24,7 @@ public class OrderController {
 
     @Autowired
     private
-    PostgresRepository localRepository;
+    RedisRepository localRepository;
 
     @Autowired
     private
@@ -39,7 +39,7 @@ public class OrderController {
     // POST - create order for userId, return orderId
     @PostMapping("/create/{userId}")
     public String orderCreate(@PathVariable(value = "userId") String userId) {
-        return localRepository.create(userId).getOrderId();
+        return (localRepository.create(userId)).getOrderId();
     }
 
 

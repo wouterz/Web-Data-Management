@@ -17,10 +17,10 @@ public class RedisRepository implements Dao {
     private HashOperations<String, String, Order> hashOps;
 
     @Override
-    public String create(Object o) {
-        Order order = (Order) o;
+    public Order create(Object o) {
+        Order order = new Order(o.toString());
         hashOps.putIfAbsent(KEY, order.getOrderId(), order);
-        return order.getOrderId();
+        return order;
     }
 
     @Override
