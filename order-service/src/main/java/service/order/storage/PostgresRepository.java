@@ -20,8 +20,8 @@ public class PostgresRepository implements Dao {
         if (c != null) return;
         try {
             c = DriverManager
-                    .getConnection("jdbc:postgresql://webdata2.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
-                            "webdata2", "reverse123");
+                    .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
+                            "webdata", "reverse123");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -49,8 +49,7 @@ public class PostgresRepository implements Dao {
         return order;
     }
 
-    @Override
-    public Order get(String id) {
+    public Order alternativeGet(String id) {
         connectoRDS();
 
         Statement statement;
@@ -83,8 +82,8 @@ public class PostgresRepository implements Dao {
         }
     }
 
-    @SuppressWarnings("Duplicates")
-    public Order alternativeGet(String id) {
+    @Override
+    public Order get(String id) {
         connectoRDS();
 
         Statement statement;

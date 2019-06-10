@@ -21,8 +21,8 @@ public class PostgresRepository implements Dao {
         if (c != null) return;
         try {
             c = DriverManager
-                    .getConnection("jdbc:postgresql://webdata2.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
-                            "webdata2", "reverse123");
+                    .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
+                            "webdata", "reverse123");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -61,8 +61,7 @@ public class PostgresRepository implements Dao {
      * @param id Id of the user to be retrieved
      * @return The user if found in the table, null otherwise
      */
-    @Override
-    public User get(String id) {
+    public User alternativeGet(String id) {
         connectoRDS();
 
         Statement statement;
@@ -93,8 +92,8 @@ public class PostgresRepository implements Dao {
         }
     }
 
-    @SuppressWarnings("Duplicates")
-    public User alternativeGet(String id) {
+    @Override
+    public User get(String id) {
         connectoRDS();
 
         Statement statement;
