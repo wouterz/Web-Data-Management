@@ -40,7 +40,6 @@ public class PostgresRepository implements Dao {
                     + "VALUES (" + orderSQLFormat(order) + ");";
             statement.executeUpdate(sql);
             statement.close();
-            c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return null;

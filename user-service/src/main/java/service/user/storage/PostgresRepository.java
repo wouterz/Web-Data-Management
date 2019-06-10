@@ -101,7 +101,6 @@ public class PostgresRepository implements Dao {
             String currentId = rs.getString("id");
             long credit = rs.getLong("credits");
             statement.close();
-            c.close();
 
             return new User(currentId, credit);
         } catch (Exception e) {
