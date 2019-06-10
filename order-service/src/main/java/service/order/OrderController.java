@@ -24,7 +24,7 @@ public class OrderController {
 
     @Autowired
     private
-    PostgresRepository localRepository;
+    RedisRepository localRepository;
 
     @Autowired
     private
