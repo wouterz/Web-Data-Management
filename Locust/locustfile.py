@@ -147,11 +147,8 @@ class UserBehavior(TaskSet):
 
         if len(unpaidOrders) > 0:
             randomOrder = unpaidOrders[random.randint(0, len(unpaidOrders)-1)]
-
-            # Make sure that the order actually has some items to check out
-            if len(randomOrder.items) > 0:
-                self.client.post("/order/checkout/" + randomOrder.orderid)
-                randomOrder.setPaid(True)
+            self.client.post("/order/checkout/" + randomOrder.orderid)
+            randomOrder.setPaid(True)
 
     """ Stock Service """
     # Get availability for a random item
