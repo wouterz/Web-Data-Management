@@ -5,4 +5,6 @@ In addition, each call to the API endpoint has an associated weight in the task 
 # Running locust
 To run locust, make sure that your command line is in the same directory as the ```locustfile.py``` and then simply run ```locust --host=[GATEWAY_IP]```.
 
+To run just the creation of users (which grows exponentially, so a hatch rate of around 2 is plenty), run ```locus -f justUsers.py --host=[GATEWAY_IP]```.
+
 The locust interface will then we accessible at http://localhost:8089/, use that interface to specify the amount of users and spawn rate to use for testing.
