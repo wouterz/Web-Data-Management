@@ -18,7 +18,7 @@ public class StockController {
 
 
     @Autowired
-    private RedisRepository localRepository;
+    PostgresRepository localRepository;
 
     // Create a new stock item by supplying the name
     @RequestMapping(value = "/stock/item/create", method = POST)

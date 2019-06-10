@@ -10,28 +10,29 @@ import java.util.List;
 @Repository
 public class PostgresRepository implements Dao {
 
-    private static Connection c = connectoRDS();
+    private static Connection c;
 
     /**
      * Connect to the AWS postgres instance
      * @return true if successful, false otherwise
      */
-    private static Connection connectoRDS() {
+    private static void connectoRDS() {
+        if (c != null) return;
         try {
             c = DriverManager
                     .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
                             "webdata", "reverse123");
-            return c;
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return null;
     }
 
     @Override
     public Order create(Object o) {
+        connectoRDS();
+
         Statement statement;
         Order order = new Order(o.toString());
         try {
@@ -50,6 +51,8 @@ public class PostgresRepository implements Dao {
 
     @Override
     public Order get(String id) {
+        connectoRDS();
+
         Statement statement;
         Order foundOrder = null;
 
@@ -82,6 +85,8 @@ public class PostgresRepository implements Dao {
 
     @SuppressWarnings("Duplicates")
     public Order alternativeGet(String id) {
+        connectoRDS();
+
         Statement statement;
 
         try {
@@ -103,6 +108,8 @@ public class PostgresRepository implements Dao {
 
     @Override
     public Order update(Object o) {
+        connectoRDS();
+
         Order order = (Order) o;
         Statement statement;
 
@@ -122,6 +129,8 @@ public class PostgresRepository implements Dao {
 
     @Override
     public boolean delete(String orderId) {
+        connectoRDS();
+
         Statement statement;
         try {
             statement = c.createStatement();

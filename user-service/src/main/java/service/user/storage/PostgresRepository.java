@@ -11,24 +11,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PostgresRepository implements Dao {
 
-    private static Connection c = connectoRDS();
+    private static Connection c;
 
     /**
      * Connect to the AWS postgres instance
      * @return true if successful, false otherwise
      */
-    private static Connection connectoRDS() {
+    private static void connectoRDS() {
+        if (c != null) return;
         try {
             c = DriverManager
                     .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
                             "webdata", "reverse123");
-            return c;
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return null;
     }
 
     /**
@@ -38,6 +37,8 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public User create(Object o) {
+        connectoRDS();
+        
         Statement statement;
         User user = (User) o;
         try {
@@ -62,6 +63,8 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public User get(String id) {
+        connectoRDS();
+
         Statement statement;
         User foundUser = null;
 
@@ -92,6 +95,8 @@ public class PostgresRepository implements Dao {
 
     @SuppressWarnings("Duplicates")
     public User alternativeGet(String id) {
+        connectoRDS();
+
         Statement statement;
 
         try {
@@ -118,6 +123,9 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public User update(Object o) {
+        connectoRDS();
+
+
         Statement statement;
         User user = (User) o;
 
@@ -142,6 +150,8 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public boolean delete(String userId) {
+        connectoRDS();
+
         Statement statement;
 
         try {

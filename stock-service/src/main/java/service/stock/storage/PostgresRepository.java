@@ -11,25 +11,25 @@ import java.sql.DriverManager;
 @Repository
 public class PostgresRepository implements Dao {
 
-    private static Connection c = connectoRDS();
+    private static Connection c;
 
     /**
      * Connect to the AWS postgres instance
      * @return true if successful, false otherwise
      */
-    private static Connection connectoRDS() {
+    private static void connectoRDS() {
+        if (c != null) return;
         try {
             c = DriverManager
                     .getConnection("jdbc:postgresql://webdata.cbcu76qz5fg7.us-east-1.rds.amazonaws.com:5432/webdata",
                             "webdata", "reverse123");
-            return c;
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return null;
     }
+
 
     /**
      * Creates new StockItem entry in the database
@@ -39,6 +39,8 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public StockItem create(Object o) {
+        connectoRDS();
+
         Statement statement;
         StockItem stock = (StockItem) o;
         try {
@@ -63,6 +65,8 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public Object get(String id) {
+        connectoRDS();
+
         Statement statement;
         StockItem foundStock = null;
 
@@ -94,6 +98,9 @@ public class PostgresRepository implements Dao {
 
     @SuppressWarnings("Duplicates")
     public StockItem alternativeGet(String id) {
+        connectoRDS();
+
+
         Statement statement;
 
         try {
@@ -118,6 +125,9 @@ public class PostgresRepository implements Dao {
 
     @Override
     public StockItem update(Object o) {
+        connectoRDS();
+
+
         StockItem stockItem = (StockItem) o;
         Statement statement;
         try {
@@ -142,6 +152,9 @@ public class PostgresRepository implements Dao {
      */
     @Override
     public boolean delete(Object o) {
+        connectoRDS();
+
+
         StockItem stock = (StockItem) o;
         Statement statement;
         try {
